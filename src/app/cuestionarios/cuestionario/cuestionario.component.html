@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-center">
+    <div class="container mt-5">
+      <div class="text-center mb-3">
+        <h2 class="mb-4">{{ cuestionarios[0].nombrecuestionario }}</h2>
+        <p>Category: {{ cuestionarios[0].category }}</p>
+      </div>
+  
+      <div *ngFor="let question of paginatedQuestions" class="card mb-4">
+        <div class="card-body">
+          <h4 class="card-title">{{ question.text }}</h4>
+          <img *ngIf="question.imageUrl" [src]="question.imageUrl" class="img-fluid mb-3" alt="Question Image">
+          <div *ngFor="let option of question.options" class="form-check">
+            <input class="form-check-input" type="radio" name="question{{ question.id }}" [value]="option.text" (change)="selectAnswer(question, option)">
+            <label class="form-check-label">{{ option.text }}</label>
+          </div>
+        </div>
+      </div>
+  
+      <div class="text-center mt-3 mb-4">
+        <button class="btn btn-primary btn-block" (click)="submit()">Enviar</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="text-center mt-3">
+    <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+    <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage * questionsPerPage >= totalQuestions">Next</button>
+  </div>
