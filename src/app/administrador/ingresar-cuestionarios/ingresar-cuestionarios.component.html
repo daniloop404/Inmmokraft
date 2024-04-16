@@ -27,9 +27,16 @@
                         <div [id]="'collapse' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="form-group mb-3">
+                                    <label for="imageUpload{{i}}">Cargar imagen (opcional)</label>
+                                    <input type="file" class="form-control" (change)="onImageUpload($event, i)" [id]="'imageUpload' + i">
+                                    <!-- Previsualización de la imagen -->
+                                    <img *ngIf="imagePreviews[i]" [src]="imagePreviews[i]" class="img-fluid mt-2" alt="Previsualización de la imagen">
+                                </div>
+                                <div class="form-group mb-3">
                                     <label for="text{{i}}">Ingresa aqui la pregunta</label>
                                     <input type="text" class="form-control" [id]="'text' + i" formControlName="text">
                                 </div>
+                                
                                 <div formArrayName="options">
                                     <div *ngFor="let option of (question.get('options')?.value || []); let j=index; trackBy: customTrackBy" [formGroupName]="j">
                                         <div class="card border-primary mb-3">

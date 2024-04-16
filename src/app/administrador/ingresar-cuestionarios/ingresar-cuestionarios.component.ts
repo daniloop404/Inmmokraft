@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { CuestionariosService } from 'src/app/cuestionarios/cuestionarios.service';
+import { forkJoin } from 'rxjs';
+
 
 @Component({
   selector: 'app-ingresar-cuestionarios',
@@ -10,6 +12,7 @@ import { CuestionariosService } from 'src/app/cuestionarios/cuestionarios.servic
 export class IngresarCuestionariosComponent {
   cuestionarioForm: FormGroup;
   cuestionarioGuardado: boolean = false;
+  imagePreviews: string[] = [];
 
   constructor(private formBuilder: FormBuilder, private cuestionariosService: CuestionariosService) {
     this.cuestionarioForm = this.formBuilder.group({
@@ -34,7 +37,8 @@ export class IngresarCuestionariosComponent {
         this.createOption()
       ]),
       selectedAnswer: [null],
-      imageUrl: ['']
+      imageUrl: [''],
+      imageFile: [null] // Agregar campo para almacenar el archivo de imagen
     });
 
     this.questions.push(question);
@@ -58,7 +62,16 @@ export class IngresarCuestionariosComponent {
   }
 
   deleteQuestion(index: number) {
+    const imageUrl = this.questions.at(index).get('imageUrl').value;
+    if (imageUrl) {
+      this.cuestionariosService.deleteImageFromStorage(imageUrl).then(() => {
+        console.log('Imagen eliminada de la base de datos.');
+      }).catch(error => {
+        console.error('Error al eliminar la imagen:', error);
+      });
+    }
     this.questions.removeAt(index);
+    this.imagePreviews.splice(index, 1);
   }
 
   onOptionChange(questionIndex: number, optionIndex: number) {
@@ -77,36 +90,63 @@ export class IngresarCuestionariosComponent {
     return options.length > 2;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.cuestionarioForm.valid) {
       const confirmacion = confirm('¿Está seguro de que desea guardar el cuestionario?');
       if (confirmacion) {
-        this.cuestionariosService.postCuestionario(this.cuestionarioForm.value).subscribe(
+        const nuevoCuestionario = { ...this.cuestionarioForm.value };
+
+        // Convertir observables de imageUrl a URL directa
+        for (let i = 0; i < nuevoCuestionario.questions.length; i++) {
+          const question = nuevoCuestionario.questions[i];
+          if (question.imageFile) {
+            try {
+              const imageUrl = await this.cuestionariosService.uploadImage(question.imageFile);
+              question.imageUrl = imageUrl; // Asigna la URL directamente // No necesitas toPromise() aquí
+              question.imageFile = null; // Eliminar el archivo de imagen para evitar la serialización circular
+            } catch (error) {
+              console.error('Error al cargar la imagen:', error);
+            }
+          }
+        }
+
+        this.cuestionariosService.postCuestionario(nuevoCuestionario).subscribe(
           (response) => {
-            console.log('Cuestionario added successfully:', response);
+            console.log('Cuestionario agregado exitosamente:', response);
             this.cuestionarioGuardado = true;
             setTimeout(() => {
               this.cuestionarioForm.reset();
-              this.addQuestion(); 
+              this.addQuestion();
               this.cuestionarioGuardado = false;
-              location.reload();
-            }, 3000); // Refresh the page after 3 seconds
+              this.imagePreviews = [];
+            }, 3000);
           },
           (error) => {
-            console.error('Error adding cuestionario:', error);
-            // Handle error
+            console.error('Error al agregar cuestionario:', error);
           }
         );
       } else {
         console.log('El cuestionario no fue guardado.');
       }
     } else {
-      console.error('Form is invalid');
-      // Handle invalid form
+      console.error('El formulario no es válido');
     }
   }
 
-  // TrackBy function
+  onImageUpload(event: any, questionIndex: number) {
+    const file = event.target.files[0];
+    const question = this.questions.at(questionIndex);
+    question.get('imageFile')?.setValue(file);
+
+    // Mostrar previsualización de la imagen
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreviews[questionIndex] = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Función TrackBy
   customTrackBy(index: number, obj: any): any {
     return index;
   }
