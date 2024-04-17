@@ -1,28 +1,33 @@
-<div class="d-flex justify-content-center">
-    <div class="container mt-5">
-      <div class="text-center mb-3">
-        <h2 class="mb-4">{{ cuestionarios[0].nombrecuestionario }}</h2>
-        <p>Category: {{ cuestionarios[0].category }}</p>
-      </div>
-  
-      <div *ngFor="let question of paginatedQuestions" class="card mb-4">
-        <div class="card-body">
-          <h4 class="card-title">{{ question.text }}</h4>
-          <img *ngIf="question.imageUrl" [src]="question.imageUrl" class="img-fluid mb-3" alt="Question Image">
-          <div *ngFor="let option of question.options" class="form-check">
+<div class="d-flex justify-content-center" *ngIf="cuestionario">
+  <div class="container mt-5">
+    <div class="text-center mb-3">
+      <h2 class="mb-4">{{ cuestionario.nombrecuestionario }}</h2>
+      <p>Category: {{ cuestionario.category }}</p>
+    </div>
+
+    <div *ngFor="let question of paginatedQuestions" class="card mb-4 shadow">
+      <div class="card-body">
+        <h4 class="card-title mb-3">{{ question.text }}</h4>
+        <hr class="my-4"> <!-- Línea entre la pregunta y las opciones -->
+        <img *ngIf="question.imageUrl" [src]="question.imageUrl" class="img-fluid mb-3" alt="Question Image">
+        <div *ngFor="let option of question.options" class="form-check mb-4">
+          <div class="option-container">
             <input class="form-check-input" type="radio" name="question{{ question.id }}" [value]="option.text" (change)="selectAnswer(question, option)">
-            <label class="form-check-label">{{ option.text }}</label>
+            <label class="form-check-label ml-2">{{ option.text }}</label>
+            
           </div>
         </div>
       </div>
-  
-      <div class="text-center mt-3 mb-4">
-        <button class="btn btn-primary btn-block" (click)="submit()">Enviar</button>
-      </div>
+    </div>
+
+    <div class="text-center mt-3 mb-4">
+      <button class="btn btn-success btn-block" (click)="submit()">Enviar</button>
     </div>
   </div>
-  
-  <div class="text-center mt-3">
-    <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
-    <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage * questionsPerPage >= totalQuestions">Next</button>
-  </div>
+</div>
+
+<div class="text-center mb-4">
+  <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Página anterior</button>
+  <span style="margin: 0 10px;"></span> <!-- Agrega un espacio horizontal -->
+  <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage * questionsPerPage >= totalQuestions">Página siguiente</button>
+</div>

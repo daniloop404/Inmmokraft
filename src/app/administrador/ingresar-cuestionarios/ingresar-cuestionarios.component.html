@@ -65,6 +65,11 @@
                 </div>
             </div>
         </div>
+        <div class="text-center mt-3 mb-3" *ngIf="!isFormValid()">
+            <div class="alert alert-danger" role="alert">
+                Por favor complete todos los campos obligatorios antes de enviar el formulario.
+            </div>
+        </div>
         <div class="text-center mt-3 mb-3">
             <button type="button" class="btn btn-primary me-2" (click)="addQuestion()">Agregar Pregunta</button>
             <button type="button" class="btn btn-danger ms-2" *ngIf="questions.controls.length > 0" (click)="deleteQuestion(questions.controls.length - 1)">Eliminar Última Pregunta</button>

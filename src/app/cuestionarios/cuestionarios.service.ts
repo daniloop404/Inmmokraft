@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
-
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +13,28 @@ export class CuestionariosService {
 
   constructor(private http: HttpClient, private storage: AngularFireStorage) { }
 
+  getCuestionarios(): Observable<any[]> {
+    const url = `${this.API_CUESTIONARIOS}.json`;
+    return this.http.get<any[]>(url).pipe(
+      map(data => {
+        if (data) {
+          return Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        } else {
+          return [];
+        }
+      })
+    );
+  }
+
   postCuestionario(nuevoCuestionario: any): Observable<any> {
     const url = `${this.API_CUESTIONARIOS}.json`;
     console.log('Nuevo cuestionario:', nuevoCuestionario);
     return this.http.post(url, nuevoCuestionario);
+  }
+
+  getCuestionarioById(id: string): Observable<any> {
+    const url = `${this.API_CUESTIONARIOS}/${id}.json`;
+    return this.http.get<any>(url);
   }
 
   uploadImage(image: File): Promise<string> {
