@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">Registro</h5>
+        <form (ngSubmit)="registrarUsuario(email.value, nombre.value, apellido.value, clave.value)">
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" class="form-control" id="email" placeholder="correo@example.com" required #email>
+          </div>
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" class="form-control" id="nombre" placeholder="Nombre" required #nombre>
+          </div>
+          <div class="form-group">
+            <label for="apellido">Apellido</label>
+            <input type="text" class="form-control" id="apellido" placeholder="Apellido" required #apellido>
+          </div>
+          <div class="form-group">
+            <label for="clave">Contraseña</label>
+            <input type="password" class="form-control" id="clave" placeholder="Contraseña" required #clave>
+          </div>
+          <!-- Mostrar el mensaje de error -->
+          <div *ngIf="errorMessage" class="alert alert-danger mt-4">{{ errorMessage }}</div>
+          <!-- Mostrar el mensaje de éxito -->
+          <div *ngIf="registroExitoso" class="alert alert-success mt-4">¡Registro exitoso! Serás redirigido al inicio de sesión.</div>
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

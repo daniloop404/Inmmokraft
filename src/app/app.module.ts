@@ -12,8 +12,12 @@ import { PanelComponent } from './administrador/panel/panel.component';
 import { FormsModule } from '@angular/forms';
 import { IngresarCuestionariosComponent } from './administrador/ingresar-cuestionarios/ingresar-cuestionarios.component';
 import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth'; // Importa AngularFireAuthModule
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { ModificarCuestionarioComponent } from './administrador/modificar-cuestionario/modificar-cuestionario.component';
+import { LoginComponent } from './general/login/login.component';
+import { RegistroComponent } from './general/registro/registro.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCWwK7ajx4Xbkn8ILriwSOsoJoYFP3Pa10",
@@ -34,7 +38,10 @@ const firebaseConfig = {
     ListadoComponent,
     CuestionarioComponent,
     PanelComponent,
-    IngresarCuestionariosComponent
+    IngresarCuestionariosComponent,
+    ModificarCuestionarioComponent,
+    LoginComponent,
+    RegistroComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +50,7 @@ const firebaseConfig = {
     FormsModule,
     HttpClientModule,
     AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule, // Agrega AngularFireAuthModule aquí
     AngularFireStorageModule,
     AngularFireDatabaseModule
   ],

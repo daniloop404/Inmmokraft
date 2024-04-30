@@ -74,7 +74,7 @@ export class CuestionarioComponent implements OnInit {
   }
 
   handleQuestion(question: Question): number {
-    const correctOption = question.options.find(option => option.correct === 'true');
+    const correctOption = question.options.find(option => option.correct === true);
     const selectedAnswer = this.selectedAnswers[question.id - 1].get(question.id);
     return selectedAnswer === correctOption?.text ? 1 : 0;
   }

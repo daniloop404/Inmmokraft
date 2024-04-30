@@ -57,4 +57,14 @@ export class CuestionariosService {
     const storageRef = this.storage.refFromURL(imageUrl);
     return storageRef.delete().toPromise();
   }
+
+  eliminarCuestionario(id: string): Observable<void> {
+    const url = `${this.API_CUESTIONARIOS}/${id}.json`;
+    return this.http.delete<void>(url);
+  }
+  updateCuestionario(id: string, updatedCuestionario: any): Observable<any> {
+    const url = `${this.API_CUESTIONARIOS}/${id}.json`;
+    return this.http.put(url, updatedCuestionario);
+  }
+  
 }

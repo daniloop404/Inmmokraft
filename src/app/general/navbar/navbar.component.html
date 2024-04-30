@@ -21,12 +21,17 @@
             <a class="nav-link" href="administrador">Administrador</a>
           </li>
         </ul>
-        <ul class="navbar-nav ml-auto"> <!-- Use ml-auto to push items to the right -->
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
+        <ul class="navbar-nav ml-auto">
+          <!-- Mostrar el botón de salir si el usuario está autenticado -->
+          <li class="nav-item" *ngIf="isUserLoggedIn">
+            <a class="nav-link" (click)="cerrarSesion()" style="cursor: pointer;">Salir</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Registro</a>
+          <!-- Mostrar los botones de registro y login si el usuario no está autenticado -->
+          <li class="nav-item" *ngIf="!isUserLoggedIn">
+            <a class="nav-link" href="login">Login</a>
+          </li>
+          <li class="nav-item" *ngIf="!isUserLoggedIn">
+            <a class="nav-link" href="registro">Registro</a>
           </li>
         </ul>
       </div>
