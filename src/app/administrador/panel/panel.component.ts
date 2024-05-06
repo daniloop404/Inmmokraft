@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CuestionariosService } from 'src/app/cuestionarios/cuestionarios.service';
+import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.service';
 
 @Component({
   selector: 'app-panel',
@@ -9,34 +10,58 @@ import { CuestionariosService } from 'src/app/cuestionarios/cuestionarios.servic
 })
 export class PanelComponent implements OnInit {
   cuestionarios: any[] = [];
+  testsPersonalidad: any[] = [];
 
-  constructor(private router: Router, private cuestionariosService: CuestionariosService) { }
+  constructor(
+    private router: Router,
+    private cuestionariosService: CuestionariosService,
+    private testPersonalidadService: TestPersonalidadService
+  ) { }
 
   ngOnInit(): void {
     this.actualizarCuestionarios();
+    this.actualizarTestsPersonalidad();
   }
 
+  // Métodos para cuestionarios
   agregarCuestionario() {
     this.router.navigate(['/ingresar-cuestionarios']);
   }
 
   eliminarCuestionario(id: string) {
-    // Lógica para eliminar el cuestionario con el ID proporcionado
     this.cuestionariosService.eliminarCuestionario(id).subscribe(() => {
-      // Actualizar la lista de cuestionarios después de eliminar
       this.actualizarCuestionarios();
     });
   }
 
   modificarCuestionario(id: string) {
-    // Redirigir a la página para modificar el cuestionario con el ID proporcionado
     this.router.navigate(['/modificar-cuestionario', id]);
   }
 
   private actualizarCuestionarios() {
-    // Actualizar la lista de cuestionarios cargándola nuevamente desde la base de datos
     this.cuestionariosService.getCuestionarios().subscribe(cuestionarios => {
       this.cuestionarios = cuestionarios;
+    });
+  }
+
+  // Métodos para tests de personalidad
+  agregarTestPersonalidad() {
+    this.router.navigate(['/ingreso-test']);
+  }
+
+  eliminarTestPersonalidad(id: string) {
+    this.testPersonalidadService.eliminarTestPersonalidad(id).subscribe(() => {
+      this.actualizarTestsPersonalidad();
+    });
+  }
+
+  modificarTestPersonalidad(id: string) {
+    this.router.navigate(['/test-personalidad-modificar', id]);
+  }
+
+  private actualizarTestsPersonalidad() {
+    this.testPersonalidadService.getTestsPersonalidad().subscribe(tests => {
+      this.testsPersonalidad = tests;
     });
   }
 }

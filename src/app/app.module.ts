@@ -18,6 +18,11 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { ModificarCuestionarioComponent } from './administrador/modificar-cuestionario/modificar-cuestionario.component';
 import { LoginComponent } from './general/login/login.component';
 import { RegistroComponent } from './general/registro/registro.component';
+import { PerfilComponent } from './usuarios/perfil/perfil.component';
+import { IngresarTestpersonalidadComponent } from './administrador/ingresar-testpersonalidad/ingresar-testpersonalidad.component';
+import { TestPersonalidadComponent } from './cuestionarios/test-personalidad/test-personalidad.component';
+import { ModificarTestComponent } from './administrador/modificar-test/modificar-test.component';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCWwK7ajx4Xbkn8ILriwSOsoJoYFP3Pa10",
@@ -41,7 +46,11 @@ const firebaseConfig = {
     IngresarCuestionariosComponent,
     ModificarCuestionarioComponent,
     LoginComponent,
-    RegistroComponent
+    RegistroComponent,
+    PerfilComponent,
+    IngresarTestpersonalidadComponent,
+    TestPersonalidadComponent,
+    ModificarTestComponent,
   ],
   imports: [
     BrowserModule,

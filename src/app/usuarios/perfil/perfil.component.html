@@ -1,0 +1,55 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Perfil de Usuario</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Nombre:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" [(ngModel)]="usuario.nombre" disabled>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Apellido:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" [(ngModel)]="usuario.apellido" disabled>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Correo Electrónico:</label>
+              <div class="col-sm-8">
+                <input type="email" class="form-control" [(ngModel)]="usuario.email" disabled>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Rol:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" [(ngModel)]="usuario.rol" disabled>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Institución:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" [(ngModel)]="usuario.institucion" disabled>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Grado:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" [(ngModel)]="usuario.grado" disabled>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-4 col-form-label">Paralelo:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" [(ngModel)]="usuario.paralelo" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

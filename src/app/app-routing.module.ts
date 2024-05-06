@@ -8,15 +8,26 @@ import { PanelComponent } from './administrador/panel/panel.component';
 import { ModificarCuestionarioComponent } from './administrador/modificar-cuestionario/modificar-cuestionario.component';
 import { RegistroComponent } from './general/registro/registro.component';
 import { LoginComponent } from './general/login/login.component';
+import { PerfilComponent } from './usuarios/perfil/perfil.component';
+import { ProfesorGuard } from './guards/profesor.guard';
+import { IngresarTestpersonalidadComponent } from './administrador/ingresar-testpersonalidad/ingresar-testpersonalidad.component';
+import { TestPersonalidadComponent } from './cuestionarios/test-personalidad/test-personalidad.component';
+import { ModificarTestComponent } from './administrador/modificar-test/modificar-test.component';
 
 const routes: Routes = [
-  { path: 'cuestionarios', component: ListadoComponent },
+  { path: 'cuestionarios', component: ListadoComponent},
   { path: 'cuestionario/:id', component: CuestionarioComponent }, // Agregamos un parámetro de ruta dinámico ":id"
   { path: 'modificar-cuestionario/:id', component:ModificarCuestionarioComponent},
   { path: 'ingresar-cuestionarios', component: IngresarCuestionariosComponent},
   { path: 'registro', component:RegistroComponent},
   { path: 'login', component:LoginComponent},
-  { path: 'administrador', component: PanelComponent}
+  { path: 'administrador', component: PanelComponent},
+  { path: 'perfil', component: PerfilComponent},
+  { path: 'ingreso-test', component:IngresarTestpersonalidadComponent},
+  { path: 'test-personalidad/:id', component:TestPersonalidadComponent},
+  { path: 'test-personalidad-modificar/:id', component:ModificarTestComponent}
+  
+
 ];
 
 @NgModule({

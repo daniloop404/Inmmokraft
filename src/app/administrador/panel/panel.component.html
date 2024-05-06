@@ -1,8 +1,9 @@
-<div class="container mt-5 mb-4 text-center">
-  <button class="btn btn-primary" (click)="agregarCuestionario()">Agregar cuestionario</button>
+<!-- Sección de Cuestionarios -->
+<div class="text-center mt-5">
+  <h2>Cuestionarios</h2>
+  <button class="btn btn-primary" (click)="agregarCuestionario()">Agregar Cuestionario</button>
 </div>
-
-<div class="container mt-5">
+<div class="container mt-3">
   <div class="row">
     <div class="col-md-4" *ngFor="let cuestionario of cuestionarios">
       <div class="card mb-4 shadow-sm">
@@ -12,6 +13,29 @@
           <div class="d-flex justify-content-between align-items-center mt-3"> <!-- Clases para espaciar y alinear botones -->
             <button class="btn btn-danger" (click)="eliminarCuestionario(cuestionario.id)">Eliminar</button>
             <button class="btn btn-warning ml-2" (click)="modificarCuestionario(cuestionario.id)">Modificar</button> <!-- Añadido 'ml-2' para espacio a la izquierda -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sección de Tests de Personalidad -->
+<div class="text-center mt-5">
+  <h2>Tests de Personalidad</h2>
+  <button class="btn btn-primary" (click)="agregarTestPersonalidad()">Agregar Test de Personalidad</button>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-4" *ngFor="let test of testsPersonalidad">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body text-center"> <!-- Añadido 'text-center' para centrar el contenido -->
+          <h5 class="card-title">{{ test.nombreTest }}</h5> <!-- Cambiado de 'nombrettest' a 'nombreTest' -->
+          <p class="card-text">Categoría: {{ test.categoria }}</p> <!-- Cambiado de 'descripcion' a 'categoria' -->
+          <div class="d-flex justify-content-between align-items-center mt-3"> <!-- Clases para espaciar y alinear botones -->
+            <button class="btn btn-danger" (click)="eliminarTestPersonalidad(test.id)">Eliminar</button>
+            <button class="btn btn-warning ml-2" (click)="modificarTestPersonalidad(test.id)">Modificar</button> <!-- Añadido 'ml-2' para espacio a la izquierda -->
           </div>
         </div>
       </div>

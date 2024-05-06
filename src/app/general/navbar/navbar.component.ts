@@ -7,18 +7,27 @@ import { UsuariosService } from 'src/app/sevicios/usuarios.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  isUserLoggedIn: boolean = false; // Variable para almacenar el estado de autenticación del usuario
+  isUserLoggedIn: boolean = false;
+  userName: string = ''; // Variable para almacenar el nombre del usuario
 
   constructor(private usuariosService: UsuariosService) { }
 
   ngOnInit(): void {
-    // Suscríbete al estado de autenticación para actualizar isUserLoggedIn cuando cambie
     this.usuariosService.getEstadoAutenticacion().subscribe(user => {
-      this.isUserLoggedIn = !!user; // Si hay un usuario autenticado, isUserLoggedIn será true
+      this.isUserLoggedIn = !!user;
+      if (user) {
+        // Si el usuario está autenticado, obtener sus datos adicionales
+        this.usuariosService.obtenerDatosUsuario(user.uid)
+          .then((userData: any) => {
+            this.userName = userData.nombre; // Asignar el nombre del usuario
+          })
+          .catch(error => {
+            console.error('Error al obtener datos del usuario:', error);
+          });
+      }
     });
   }
 
-  // Método para cerrar sesión
   cerrarSesion(): void {
     this.usuariosService.cerrarSesion()
       .then(() => console.log('Sesión cerrada exitosamente'))
