@@ -1,0 +1,42 @@
+.card {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+  
+  .card:hover {
+    cursor: pointer;
+    transform: scale(1.05); /* Hacer que la tarjeta se agrande al pasar el mouse */
+  }
+  
+  .card-image {
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+  }
+  
+  .card-body {
+    position: relative;
+    padding: 15px;
+  }
+  
+  .card-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #000;
+    text-align: center;
+  }
+  
+  .card-text {
+    margin: 10px 0 0;
+  }
+  
+  .d-flex {
+    display: flex;
+  }
+  
+  .btn {
+    margin: 5px;
+  }

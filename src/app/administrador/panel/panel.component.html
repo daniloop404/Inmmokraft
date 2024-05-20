@@ -1,18 +1,21 @@
-<!-- Sección de Cuestionarios -->
 <div class="text-center mt-5">
-  <h2>Cuestionarios</h2>
-  <button class="btn btn-primary" (click)="agregarCuestionario()">Agregar Cuestionario</button>
+  <h2>Test de opción múltiple o Verdadero/Falso</h2>
+  <button class="btn btn-success" (click)="agregarCuestionario()">Agregar</button>
+  <button class="btn btn-primary mx-2" (click)="toggleSeccion('cuestionarios')">
+    {{ mostrarCuestionarios ? 'Ocultar' : 'Mostrar' }} Cuestionarios
+  </button>
 </div>
-<div class="container mt-3">
+<div class="container mt-3" *ngIf="mostrarCuestionarios">
   <div class="row">
     <div class="col-md-4" *ngFor="let cuestionario of cuestionarios">
       <div class="card mb-4 shadow-sm">
-        <div class="card-body text-center"> <!-- Añadido 'text-center' para centrar el contenido -->
+        <div class="card-body text-center">
           <h5 class="card-title">{{ cuestionario.nombrecuestionario }}</h5>
-          <p class="card-text">Categoría: {{ cuestionario.category }}</p>
-          <div class="d-flex justify-content-between align-items-center mt-3"> <!-- Clases para espaciar y alinear botones -->
+          <div class="card-image mt-2 mb-2" [ngStyle]="{'background-image': 'url(' + cuestionario.portadaUrl+ ')'}"></div>
+          <p class="card-text">Descripción: {{ cuestionario.category }}</p>
+          <div class="d-flex justify-content-between align-items-center mt-3">
             <button class="btn btn-danger" (click)="eliminarCuestionario(cuestionario.id)">Eliminar</button>
-            <button class="btn btn-warning ml-2" (click)="modificarCuestionario(cuestionario.id)">Modificar</button> <!-- Añadido 'ml-2' para espacio a la izquierda -->
+            <button class="btn btn-warning mx-2" (click)="modificarCuestionario(cuestionario.id)">Modificar</button>
           </div>
         </div>
       </div>
@@ -20,25 +23,48 @@
   </div>
 </div>
 
-<!-- Sección de Tests de Personalidad -->
 <div class="text-center mt-5">
-  <h2>Tests de Personalidad</h2>
-  <button class="btn btn-primary" (click)="agregarTestPersonalidad()">Agregar Test de Personalidad</button>
+  <h2>Escala de Likert</h2>
+  <button class="btn btn-success" (click)="agregarTestPersonalidad()">Agregar</button>
+  <button class="btn btn-primary mx-2" (click)="toggleSeccion('testsPersonalidad')">
+    {{ mostrarTestsPersonalidad ? 'Ocultar' : 'Mostrar' }} Tests de Personalidad
+  </button>
 </div>
-
-<div class="container mt-3">
+<div class="container mt-3" *ngIf="mostrarTestsPersonalidad">
   <div class="row">
     <div class="col-md-4" *ngFor="let test of testsPersonalidad">
       <div class="card mb-4 shadow-sm">
-        <div class="card-body text-center"> <!-- Añadido 'text-center' para centrar el contenido -->
-          <h5 class="card-title">{{ test.nombreTest }}</h5> <!-- Cambiado de 'nombrettest' a 'nombreTest' -->
-          <p class="card-text">Categoría: {{ test.categoria }}</p> <!-- Cambiado de 'descripcion' a 'categoria' -->
-          <div class="d-flex justify-content-between align-items-center mt-3"> <!-- Clases para espaciar y alinear botones -->
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ test.nombreTest }}</h5>
+          <div class="card-image mt-2 mb-2" [ngStyle]="{'background-image': 'url(' + test.portada + ')'}"></div>
+          <p class="card-text">Descripción: {{ test.categoria }}</p>
+          <div class="d-flex justify-content-between align-items-center mt-3">
             <button class="btn btn-danger" (click)="eliminarTestPersonalidad(test.id)">Eliminar</button>
-            <button class="btn btn-warning ml-2" (click)="modificarTestPersonalidad(test.id)">Modificar</button> <!-- Añadido 'ml-2' para espacio a la izquierda -->
+            <button class="btn btn-warning ml-2" (click)="modificarTestPersonalidad(test.id)">Modificar</button>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-center mt-5">
+  <h2>Formulario de Contacto</h2>
+  <button class="btn btn-primary ml-2" (click)="toggleSeccion('formularioContacto')">
+    {{ mostrarFormularioContacto ? 'Ocultar' : 'Mostrar' }} Formulario de Contacto
+  </button>
+</div>
+<div class="container mt-3 mb-5" *ngIf="mostrarFormularioContacto">
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h3>Mensajes Recientes</h3>
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let contacto of contactos">
+          <strong>Email:</strong> {{ contacto.email }}<br>
+          <strong>Mensaje:</strong> {{ contacto.message }}<br>
+          <button class="btn btn-danger btn-sm mt-2" (click)="eliminarContacto(contacto.id)">Eliminar</button>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

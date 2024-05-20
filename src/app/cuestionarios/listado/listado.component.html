@@ -1,22 +1,28 @@
 <div class="container mt-5">
-  <h2>Cuestionarios</h2>
+  <h2>Opción Múltiple</h2>
   <div class="row">
     <div class="col-md-4" *ngFor="let cuestionario of cuestionarios">
       <div class="card mb-4 shadow-sm" (click)="verCuestionario(cuestionario.id)">
-        <div class="card-body">
+        <div class="card-body overlay">
           <h5 class="card-title">{{ cuestionario.nombrecuestionario }}</h5>
+        </div>
+        <div class="card-image" [ngStyle]="{'background-image': 'url(' + cuestionario.portadaUrl + ')'}"></div>
+        <div class="card-body">
           <p class="card-text">Categoría: {{ cuestionario.category }}</p>
         </div>
       </div>
     </div>
   </div>
 
-  <h2>Tests de Personalidad</h2>
+  <h2>Escala de Likert</h2>
   <div class="row">
     <div class="col-md-4" *ngFor="let test of testsPersonalidad">
       <div class="card mb-4 shadow-sm" (click)="vertestPersonalidad(test.id)">
-        <div class="card-body">
+        <div class="card-body overlay">
           <h5 class="card-title">{{ test.nombreTest }}</h5>
+        </div>
+        <div class="card-image" [ngStyle]="{'background-image': 'url(' + test.portada + ')'}"></div>
+        <div class="card-body">
           <p class="card-text">Categoría: {{ test.categoria }}</p>
         </div>
       </div>

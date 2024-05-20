@@ -1,0 +1,73 @@
+/* Background image for the container */
+.container {
+    background-image: url('/assets/images/contacto.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Overlay effect */
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    border-radius: 10px;
+}
+
+/* Content styles */
+.faq-section,
+.contact-info,
+.contact-form {
+    background-color: transparent;
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    margin-bottom: 20px;
+    z-index: 2;
+    position: relative;
+}
+
+.faq-section h2,
+.contact-info h2,
+.contact-form h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.faq h5 {
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.faq p,
+.contact-info p {
+    margin-bottom: 20px;
+}
+
+.contact-form .form-control {
+    margin-bottom: 20px;
+}
+
+.boton {
+    width: 150px;
+    height: auto;
+    font-size: large;
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.boton:hover {
+    background-color: #ffffff;
+    color: #000;
+}

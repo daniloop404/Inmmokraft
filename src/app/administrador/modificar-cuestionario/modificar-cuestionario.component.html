@@ -9,8 +9,18 @@
             <input type="text" class="form-control" id="nombrecuestionario" formControlName="nombrecuestionario">
         </div>
         <div class="form-group">
-            <label for="category">Categoría</label>
+            <label for="category">Descripción</label>
             <input type="text" class="form-control" id="category" formControlName="category">
+        </div>
+        <div class="form-group">
+            <label for="portadaUpload">Cargar imagen de portada</label>
+            <input type="file" class="form-control" (change)="onPortadaUpload($event)" id="portadaUpload">
+            <!-- Previsualización de la imagen de portada -->
+            <div class="text-center">
+                <h4>Imagen de portada actual</h4>
+                <img *ngIf="portadaPreview" [src]="portadaPreview" class="img-fluid mt-2" alt="Previsualización de la portada" style="max-height: 400px;">
+            </div>
+            
         </div>
         <div class="text-center mb-3 mt-3">
             <h4>Modificar preguntas</h4>
@@ -30,7 +40,10 @@
                                     <label for="imageUpload{{i}}">Cargar imagen (opcional)</label>
                                     <input type="file" class="form-control" (change)="onImageUpload($event, i)" [id]="'imageUpload' + i">
                                     <!-- Previsualización de la imagen -->
-                                    <img *ngIf="imagePreviews[i]" [src]="imagePreviews[i]" class="img-fluid mt-2" alt="Previsualización de la imagen">
+                                    <div class="text-center">
+                                        <h4>Imagen de la pregunta {{i +1}}</h4>
+                                        <img *ngIf="imagePreviews[i]" [src]="imagePreviews[i]" class="img-fluid mt-2" alt="Previsualización de la imagen" style="max-height: 400px;">
+                                    </div>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="text{{i}}">Modificar la pregunta</label>

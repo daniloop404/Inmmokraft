@@ -1,4 +1,41 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
 .card:hover {
-    cursor: pointer; /* Cambiar el cursor a una mano */
-    background-color: #f0f0f0; /* Cambiar el color de fondo al pasar el mouse */
-  }
+  cursor: pointer;
+  transform: scale(1.05); /* Hacer que la tarjeta se agrande al pasar el mouse */
+}
+
+.card-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.card-body {
+  position: relative;
+  padding: 15px;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5); /* Fondo gris transparente */
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  background-color: #000;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+}
+
+.card-text {
+  margin: 10px 0 0;
+}

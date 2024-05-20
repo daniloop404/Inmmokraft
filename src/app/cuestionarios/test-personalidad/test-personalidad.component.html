@@ -1,31 +1,49 @@
-<div class="d-flex justify-content-center" *ngIf="testPersonalidad">
-    <div class="container mt-5">
-      <div class="text-center mb-3">
-        <h2 class="mb-4">{{ testPersonalidad.nombreTest }}</h2>
-        <p>Categoría: {{ testPersonalidad.categoria }}</p>
+<div class="portada-titulo" [ngStyle]="{'background-image': 'url(' + testPersonalidad.portada + ')'}">
+  <h2>{{ testPersonalidad.nombreTest }}</h2>
+  <p>Categoría: {{ testPersonalidad.categoria }}</p>
+</div>
+
+<div class="container mt-5">
+  <div *ngFor="let pregunta of paginatedPreguntas; let i = index" class="card-container mb-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title text-white">PREGUNTA {{ (currentPage - 1) * questionsPerPage + i + 1 }}</h5>
       </div>
-  
-      <div *ngFor="let pregunta of testPersonalidad.preguntas; let i = index" class="card mb-4 shadow">
-        <div class="card-body">
-          <h4 class="card-title mb-3">{{ pregunta.textoPregunta }}</h4>
-          <hr class="my-4">
-          <div class="form-check mb-4" *ngFor="let opcionTexto of pregunta.opciones; let j = index">
+      <div class="card-body d-flex">
+        <div class="question-section">
+          <h4 class="mb-3">{{ pregunta.textoPregunta }}</h4>
+          <div *ngFor="let opcionTexto of pregunta.opciones; let j = index" class="form-check mb-2">
             <div class="option-container">
-              <input class="form-check-input" type="radio" [id]="'pregunta_' + i + '_opcion_' + j" [name]="'pregunta_' + i" [value]="j" (change)="selectAnswer(i, j)">
-              <label class="form-check-label ml-2" [for]="'pregunta_' + i + '_opcion_' + j">{{ opcionTexto }}</label>
+              <button
+                class="btn"
+                [ngClass]="{
+                  'btn-light': !isOptionSelected(i, j),
+                  'btn-dark': isOptionSelected(i, j),
+                  'btn-secondary': !isOptionSelected(i, j) && isOptionHovered(opcionTexto)
+                }"
+                (click)="selectAnswer(i, j)"
+                (mouseenter)="setHoveredOption(opcionTexto)"
+                (mouseleave)="clearHoveredOption()"
+              >
+                {{ opcionTexto }}
+              </button>
             </div>
           </div>
         </div>
-      </div>
-  
-      <div class="text-center mt-3 mb-4">
-        <button class="btn btn-success btn-block" (click)="submit()">Enviar</button>
+        <div class="image-section">
+          <img *ngIf="pregunta.imagenPregunta" [src]="pregunta.imagenPregunta" class="img-fluid" alt="Imagen de pregunta">
+        </div>
       </div>
     </div>
   </div>
-  
-  <div class="text-center mb-4">
-    <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Página anterior</button>
-    <span style="margin: 0 10px;"></span> <!-- Agrega un espacio horizontal -->
-    <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage * questionsPerPage >= totalQuestions">Página siguiente</button>
+
+  <div class="text-center mt-3 mb-4">
+    <button class="btn btn-success btn-block" (click)="submit()">Enviar</button>
   </div>
+</div>
+
+<div class="text-center mb-4">
+  <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Página anterior</button>
+  <span style="margin: 0 10px;"></span>
+  <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage * questionsPerPage >= totalQuestions">Página siguiente</button>
+</div>

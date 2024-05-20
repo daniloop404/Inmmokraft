@@ -1,0 +1,86 @@
+.portada-titulo {
+  background-size: cover;
+  background-repeat: repeat-x;
+  background-position: center;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  outline: #333;
+}
+
+.portada-titulo h2, .portada-titulo p {
+  margin: 0;
+  color: #fff;
+  text-shadow: -1px -1px 0 #000000;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .card {
+    width: 100%;
+    max-width: 1200px;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .card-header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+  
+  .card-body {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .question-section {
+    flex: 1;
+    padding-right: 20px;
+  }
+  
+  .option-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+  }
+  
+  .option-container:hover {
+    background-color: #e9ecef;
+  }
+  
+  .option-container input[type="radio"] {
+    margin-right: 8px;
+  }
+  
+  .option-container label {
+    margin-bottom: 0;
+  }
+  
+  .image-section {
+    flex: 0 0 auto;
+    max-width: 40%;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .img-fluid {
+    max-height: 300px;
+    object-fit: contain;
+  }

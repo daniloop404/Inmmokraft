@@ -21,6 +21,7 @@ interface Cuestionario {
   nombrecuestionario: string;
   category: string;
   questions: Question[];
+  portadaUrl?: string; // Asegúrate de tener esta propiedad
 }
 
 @Component({
@@ -35,6 +36,7 @@ export class CuestionarioComponent implements OnInit {
   totalQuestions: number = 0;
   selectedAnswers: Map<number, string | null>[] = [];
   cuestionario: Cuestionario | null = null;
+  hoveredOption: Option | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,8 +71,14 @@ export class CuestionarioComponent implements OnInit {
   }
 
   selectAnswer(question: Question, option: Option) {
+    this.clearSelectedOptions(question);
+    option.selected = true;
     this.selectedAnswers[question.id - 1].set(question.id, option.text);
     question.selectedAnswer = option.text;
+  }
+
+  clearSelectedOptions(question: Question) {
+    question.options.forEach(option => option.selected = false);
   }
 
   handleQuestion(question: Question): number {
@@ -100,5 +108,17 @@ export class CuestionarioComponent implements OnInit {
       this.currentPage++;
       this.paginateQuestions();
     }
+  }
+
+  isOptionHovered(option: Option): boolean {
+    return this.hoveredOption === option;
+  }
+
+  setHoveredOption(option: Option) {
+    this.hoveredOption = option;
+  }
+
+  clearHoveredOption() {
+    this.hoveredOption = null;
   }
 }

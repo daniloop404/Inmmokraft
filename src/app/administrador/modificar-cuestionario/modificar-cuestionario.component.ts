@@ -12,6 +12,7 @@ export class ModificarCuestionarioComponent implements OnInit {
   cuestionarioForm: FormGroup;
   cuestionarioId: string;
   imagePreviews: string[] = [];
+  portadaPreview: string | null = null; // Previsualización de la portada
 
   constructor(
     private formBuilder: FormBuilder,
@@ -19,14 +20,14 @@ export class ModificarCuestionarioComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    // Inicializar el FormGroup con valores vacíos
     this.cuestionarioForm = this.formBuilder.group({
       nombrecuestionario: ['', Validators.required],
       category: ['', Validators.required],
+      portadaFile: [null], // Campo para la imagen de portada
       questions: this.formBuilder.array([])
     });
   }
-  
+
   ngOnInit() {
     this.cuestionarioId = this.route.snapshot.paramMap.get('id');
     this.cuestionariosService.getCuestionarioById(this.cuestionarioId).subscribe(
@@ -38,13 +39,15 @@ export class ModificarCuestionarioComponent implements OnInit {
       }
     );
   }
-  
+
   initForm(cuestionario: any) {
-    // Actualizar el FormGroup con los datos del cuestionario
     this.cuestionarioForm.patchValue({
       nombrecuestionario: cuestionario.nombrecuestionario,
       category: cuestionario.category
     });
+
+    this.imagePreviews = [];
+    this.portadaPreview = cuestionario.portadaUrl; // Asignar la imagen de portada si existe
 
     cuestionario.questions.forEach((question, index) => {
       const options = this.formBuilder.array(
@@ -66,7 +69,7 @@ export class ModificarCuestionarioComponent implements OnInit {
       });
 
       this.questions.push(questionGroup);
-      this.imagePreviews[index] = question.imageUrl;
+      this.imagePreviews.push(question.imageUrl); // Agregar la imagen existente
     });
   }
 
@@ -136,7 +139,7 @@ export class ModificarCuestionarioComponent implements OnInit {
     return options.length > 2;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (!this.isFormValid()) {
       console.error('Por favor complete todos los campos obligatorios.');
       return;
@@ -144,7 +147,6 @@ export class ModificarCuestionarioComponent implements OnInit {
 
     const updatedCuestionario = { ...this.cuestionarioForm.value };
 
-    // Validar que cada pregunta tenga al menos una opción marcada como correcta
     const preguntasValidas = updatedCuestionario.questions.every((question: any) => {
       return question.options.some((option: any) => option.correct);
     });
@@ -152,6 +154,31 @@ export class ModificarCuestionarioComponent implements OnInit {
     if (!preguntasValidas) {
       alert('Cada pregunta debe tener al menos una opción marcada como correcta.');
       return;
+    }
+
+    if (updatedCuestionario.portadaFile) {
+      try {
+        const portadaUrl = await this.cuestionariosService.uploadImage(updatedCuestionario.portadaFile);
+        updatedCuestionario.portadaUrl = portadaUrl;
+        updatedCuestionario.portadaFile = null;
+      } catch (error) {
+        console.error('Error al cargar la portada:', error);
+      }
+    }
+
+    for (let i = 0; i < updatedCuestionario.questions.length; i++) {
+      const question = updatedCuestionario.questions[i];
+      if (question.imageFile) {
+        try {
+          const imageUrl = await this.cuestionariosService.uploadImage(question.imageFile);
+          question.imageUrl = imageUrl;
+          question.imageFile = null;
+        } catch (error) {
+          console.error('Error al cargar la imagen:', error);
+        }
+      } else {
+        question.imageUrl = this.imagePreviews[i];
+      }
     }
 
     this.cuestionariosService.updateCuestionario(this.cuestionarioId, updatedCuestionario).subscribe(
@@ -165,12 +192,22 @@ export class ModificarCuestionarioComponent implements OnInit {
     );
   }
 
+  onPortadaUpload(event: any) {
+    const file = event.target.files[0];
+    this.cuestionarioForm.get('portadaFile')?.setValue(file);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.portadaPreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
   onImageUpload(event: any, questionIndex: number) {
     const file = event.target.files[0];
     const question = this.questions.at(questionIndex);
     question.get('imageFile')?.setValue(file);
 
-    // Mostrar previsualización de la imagen
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreviews[questionIndex] = reader.result as string;
@@ -187,7 +224,6 @@ export class ModificarCuestionarioComponent implements OnInit {
       return false;
     }
 
-    // Check if all fields are filled
     const controls = this.cuestionarioForm.controls;
     for (const field in controls) {
       if (controls[field].invalid) {
@@ -195,7 +231,6 @@ export class ModificarCuestionarioComponent implements OnInit {
       }
     }
 
-    // Check if each question has its fields filled
     const questions = this.questions.controls;
     for (const question of questions) {
       if (question.invalid) {

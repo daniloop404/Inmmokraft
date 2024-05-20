@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CuestionariosService } from 'src/app/cuestionarios/cuestionarios.service';
 import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.service';
+import { ContactoService } from 'src/app/servicios/contacto.service';
 
 @Component({
   selector: 'app-panel',
@@ -11,16 +12,23 @@ import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.ser
 export class PanelComponent implements OnInit {
   cuestionarios: any[] = [];
   testsPersonalidad: any[] = [];
+  contactos: any[] = [];
+
+  mostrarCuestionarios = true;
+  mostrarTestsPersonalidad = true;
+  mostrarFormularioContacto = true;
 
   constructor(
     private router: Router,
     private cuestionariosService: CuestionariosService,
-    private testPersonalidadService: TestPersonalidadService
+    private testPersonalidadService: TestPersonalidadService,
+    private contactoService: ContactoService
   ) { }
 
   ngOnInit(): void {
     this.actualizarCuestionarios();
     this.actualizarTestsPersonalidad();
+    this.actualizarContactos();
   }
 
   // Métodos para cuestionarios
@@ -63,5 +71,28 @@ export class PanelComponent implements OnInit {
     this.testPersonalidadService.getTestsPersonalidad().subscribe(tests => {
       this.testsPersonalidad = tests;
     });
+  }
+
+  // Métodos para contactos
+  private actualizarContactos() {
+    this.contactoService.getContactos().subscribe(contactos => {
+      this.contactos = contactos;
+    });
+  }
+
+  eliminarContacto(id: string) {
+    this.contactoService.eliminarContacto(id).subscribe(() => {
+      this.actualizarContactos();
+    });
+  }
+
+  toggleSeccion(seccion: string) {
+    if (seccion === 'cuestionarios') {
+      this.mostrarCuestionarios = !this.mostrarCuestionarios;
+    } else if (seccion === 'testsPersonalidad') {
+      this.mostrarTestsPersonalidad = !this.mostrarTestsPersonalidad;
+    } else if (seccion === 'formularioContacto') {
+      this.mostrarFormularioContacto = !this.mostrarFormularioContacto;
+    }
   }
 }

@@ -12,11 +12,13 @@ export class IngresarCuestionariosComponent {
   cuestionarioForm: FormGroup;
   cuestionarioGuardado: boolean = false;
   imagePreviews: string[] = [];
+  portadaPreview: string | null = null;
 
   constructor(private formBuilder: FormBuilder, private cuestionariosService: CuestionariosService) {
     this.cuestionarioForm = this.formBuilder.group({
       nombrecuestionario: ['', Validators.required],
       category: ['', Validators.required],
+      portadaFile: [null], // Agregar campo para almacenar el archivo de imagen de portada
       questions: this.formBuilder.array([])
     });
 
@@ -99,7 +101,6 @@ export class IngresarCuestionariosComponent {
     if (confirmacion) {
       const nuevoCuestionario = { ...this.cuestionarioForm.value };
 
-      // Validar que cada pregunta tenga al menos una opción marcada como correcta
       const preguntasValidas = nuevoCuestionario.questions.every((question: any) => {
         return question.options.some((option: any) => option.correct);
       });
@@ -109,13 +110,23 @@ export class IngresarCuestionariosComponent {
         return;
       }
 
-      // Convertir observables de imageUrl a URL directa
+      // Subir la imagen de portada si existe
+      if (nuevoCuestionario.portadaFile) {
+        try {
+          const portadaUrl = await this.cuestionariosService.uploadImage(nuevoCuestionario.portadaFile);
+          nuevoCuestionario.portadaUrl = portadaUrl; // Asigna la URL directamente
+          nuevoCuestionario.portadaFile = null; // Eliminar el archivo de imagen para evitar la serialización circular
+        } catch (error) {
+          console.error('Error al cargar la imagen de portada:', error);
+        }
+      }
+
       for (let i = 0; i < nuevoCuestionario.questions.length; i++) {
         const question = nuevoCuestionario.questions[i];
         if (question.imageFile) {
           try {
             const imageUrl = await this.cuestionariosService.uploadImage(question.imageFile);
-            question.imageUrl = imageUrl; // Asigna la URL directamente // No necesitas toPromise() aquí
+            question.imageUrl = imageUrl; // Asigna la URL directamente
             question.imageFile = null; // Eliminar el archivo de imagen para evitar la serialización circular
           } catch (error) {
             console.error('Error al cargar la imagen:', error);
@@ -132,6 +143,7 @@ export class IngresarCuestionariosComponent {
             this.addQuestion();
             this.cuestionarioGuardado = false;
             this.imagePreviews = [];
+            this.portadaPreview = null;
           }, 3000);
         },
         (error) => {
@@ -143,12 +155,22 @@ export class IngresarCuestionariosComponent {
     }
   }
 
+  onPortadaUpload(event: any) {
+    const file = event.target.files[0];
+    this.cuestionarioForm.get('portadaFile')?.setValue(file);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.portadaPreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
   onImageUpload(event: any, questionIndex: number) {
     const file = event.target.files[0];
     const question = this.questions.at(questionIndex);
     question.get('imageFile')?.setValue(file);
 
-    // Mostrar previsualización de la imagen
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreviews[questionIndex] = reader.result as string;
@@ -156,7 +178,6 @@ export class IngresarCuestionariosComponent {
     reader.readAsDataURL(file);
   }
 
-  // Función TrackBy
   customTrackBy(index: number, obj: any): any {
     return index;
   }
@@ -166,7 +187,6 @@ export class IngresarCuestionariosComponent {
       return false;
     }
 
-    // Check if all fields are filled
     const controls = this.cuestionarioForm.controls;
     for (const field in controls) {
       if (controls[field].invalid) {
@@ -174,7 +194,6 @@ export class IngresarCuestionariosComponent {
       }
     }
 
-    // Check if each question has its fields filled
     const questions = this.questions.controls;
     for (const question of questions) {
       if (question.invalid) {

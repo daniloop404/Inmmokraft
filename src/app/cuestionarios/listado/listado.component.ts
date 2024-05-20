@@ -17,9 +17,11 @@ export class ListadoComponent implements OnInit {
   verCuestionario(id: string) {
     this.router.navigate(['/cuestionario', id]);
   }
+
   vertestPersonalidad(id: string) {
     this.router.navigate(['/test-personalidad', id]);
   }
+
   ngOnInit(): void {
     // Obtener cuestionarios
     this.cuestionariosService.getCuestionarios().subscribe(cuestionarios => {

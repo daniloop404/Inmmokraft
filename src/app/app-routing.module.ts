@@ -13,8 +13,11 @@ import { ProfesorGuard } from './guards/profesor.guard';
 import { IngresarTestpersonalidadComponent } from './administrador/ingresar-testpersonalidad/ingresar-testpersonalidad.component';
 import { TestPersonalidadComponent } from './cuestionarios/test-personalidad/test-personalidad.component';
 import { ModificarTestComponent } from './administrador/modificar-test/modificar-test.component';
+import { HomeComponent } from './general/home/home.component';
+import { ContactoComponent } from './general/contacto/contacto.component';
 
 const routes: Routes = [
+  { path: '', component: HomeComponent},
   { path: 'cuestionarios', component: ListadoComponent},
   { path: 'cuestionario/:id', component: CuestionarioComponent }, // Agregamos un parámetro de ruta dinámico ":id"
   { path: 'modificar-cuestionario/:id', component:ModificarCuestionarioComponent},
@@ -25,7 +28,9 @@ const routes: Routes = [
   { path: 'perfil', component: PerfilComponent},
   { path: 'ingreso-test', component:IngresarTestpersonalidadComponent},
   { path: 'test-personalidad/:id', component:TestPersonalidadComponent},
-  { path: 'test-personalidad-modificar/:id', component:ModificarTestComponent}
+  { path: 'test-personalidad-modificar/:id', component:ModificarTestComponent},
+  { path: 'contacto', component: ContactoComponent},
+
   
 
 ];

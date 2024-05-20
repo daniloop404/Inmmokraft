@@ -1,0 +1,131 @@
+.carousel {
+    margin: 0 auto; /* centrar el carrusel horizontalmente */
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-prev {
+    left: 0;
+}
+
+.carousel-control-next {
+    right: 0;
+}
+
+.carousel-inner img {
+    margin: 0 auto; /* centrar la imagen horizontalmente */
+    display: block; /* centrar la imagen horizontalmente */
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.5); /* negro con transparencia del 50% */
+    padding: 20px; /* ajustar el espaciado del texto según sea necesario */
+    border-radius: 10px; /* opcional: agregar bordes redondeados */
+}
+.carousel-indicators {
+    position: absolute;
+    bottom: 10px; /* Ajusta la posición vertical según sea necesario */
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: auto;
+    z-index: 10; /* Asegura que los indicadores estén por encima del contenido del carrusel */
+}
+
+.carousel-indicators li {
+    display: inline-block;
+    width: 10px; /* Ajusta el ancho según sea necesario */
+    height: 10px; /* Ajusta la altura según sea necesario */
+    margin: 0 5px; /* Ajusta el espaciado horizontal entre los indicadores */
+    text-indent: 0;
+    cursor: pointer;
+    background-color: #fff; /* Cambia el color de fondo según sea necesario */
+    border: 1px solid #000; /* Cambia el color del borde según sea necesario */
+    border-radius: 50%; /* Ajusta el radio de borde para que los indicadores sean redondos */
+    opacity: 0.5; /* Ajusta la opacidad predeterminada de los indicadores */
+    transition: opacity 0.6s ease; /* Agrega una transición suave al cambiar la opacidad */
+}
+
+.carousel-indicators li.active {
+    opacity: 1; /* Ajusta la opacidad del indicador activo */
+}
+
+.home-container {
+    text-align: center;
+    padding: 50px;
+  }
+  
+  h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  .cta-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cta-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .image-section {
+    margin-top: 50px;
+  }
+  
+  .image-section img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .image-section p {
+    font-size: 1em;
+  }
+ /* Estilos para la sección de información de los tests */
+ .test-info-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.test-info-text {
+    flex: 1;
+    text-align: center;
+    margin-right: 20px; /* Ajusta el margen derecho si es necesario */
+}
+
+.test-info-text h2, .test-info-text h3 {
+    color: #007bff;
+}
+
+.test-info-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    max-height: 400px; /* Limita la altura de la imagen */
+    width: auto; /* Asegura que el ancho se ajuste automáticamente */
+}
+.boton{
+    width: 150px;
+    height: auto;
+    font-size: large;
+}

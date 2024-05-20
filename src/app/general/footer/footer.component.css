@@ -1,0 +1,19 @@
+/* Estilos para el footer */
+footer {
+    color: #fff; /* Color blanco para el texto */
+  }
+  
+  /* Estilos para los enlaces dentro del footer */
+  footer a {
+    color: #fff; /* Color blanco para los enlaces */
+  }
+  
+  /* Estilos para los enlaces dentro del footer al ser visitados */
+  footer a:hover {
+    text-decoration: none; /* Quita el subrayado al pasar el ratón sobre los enlaces */
+  }
+
+  footer h5 {
+    color: #fff;
+    font-size: larger;
+  }

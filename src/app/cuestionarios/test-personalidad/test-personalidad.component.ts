@@ -5,7 +5,8 @@ import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.ser
 interface Pregunta {
   id: string;
   textoPregunta: string;
-  opciones: string[]; // Agregamos opciones para cada pregunta
+  opciones: string[];
+  imagenPregunta: string;
 }
 
 interface RespuestaSeleccionada {
@@ -20,10 +21,12 @@ interface RespuestaSeleccionada {
 })
 export class TestPersonalidadComponent implements OnInit {
   currentPage: number = 1;
-  questionsPerPage: number = 1; // Solo una pregunta por página para este tipo de test
+  questionsPerPage: number = 10; // Número de preguntas por página
+  paginatedPreguntas: Pregunta[] = []; // Preguntas paginadas
   testPersonalidad: any | null = null;
   totalQuestions: number = 0;
-  selectedAnswers: RespuestaSeleccionada[] = []; // Array para almacenar las respuestas seleccionadas
+  selectedAnswers: RespuestaSeleccionada[] = [];
+  hoveredOption: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,30 +36,47 @@ export class TestPersonalidadComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const testPersonalidadId = params['id'];
-      // Obtener el test de personalidad por su ID
       this.testPersonalidadService.getTestPersonalidadById(testPersonalidadId).subscribe(testPersonalidad => {
         if (testPersonalidad) {
           this.testPersonalidad = testPersonalidad;
           this.totalQuestions = this.testPersonalidad.preguntas.length;
-          // Asignar las opciones a cada pregunta
-          this.testPersonalidad.preguntas.forEach(pregunta => {
-            pregunta.opciones = ['En desacuerdo totalmente', 'En desacuerdo', 'Ni en desacuerdo ni en acuerdo', 'En acuerdo', 'En total acuerdo'];
-          });
-          // Inicializar las respuestas seleccionadas
           this.initializeSelectedAnswers();
+          this.paginatePreguntas();
         }
       });
     });
   }
 
-  selectAnswer(preguntaIndex: number, opcionIndex: number) {
-    this.selectedAnswers[preguntaIndex].opcionIndex = opcionIndex;
-  }
-  
   initializeSelectedAnswers() {
     this.selectedAnswers = this.testPersonalidad.preguntas.map(pregunta => ({ preguntaId: pregunta.id, opcionIndex: null }));
   }
-  
+
+  paginatePreguntas() {
+    const startIndex = (this.currentPage - 1) * this.questionsPerPage;
+    const endIndex = startIndex + this.questionsPerPage;
+    this.paginatedPreguntas = this.testPersonalidad?.preguntas.slice(startIndex, endIndex) || [];
+  }
+
+  selectAnswer(preguntaIndex: number, opcionIndex: number) {
+    this.selectedAnswers[preguntaIndex].opcionIndex = opcionIndex;
+  }
+
+  isOptionSelected(preguntaIndex: number, opcionIndex: number): boolean {
+    return this.selectedAnswers[preguntaIndex].opcionIndex === opcionIndex;
+  }
+
+  isOptionHovered(opcion: string): boolean {
+    return this.hoveredOption === opcion;
+  }
+
+  setHoveredOption(opcion: string) {
+    this.hoveredOption = opcion;
+  }
+
+  clearHoveredOption() {
+    this.hoveredOption = null;
+  }
+
   calculateScore(): number {
     let totalScore = 0;
     this.selectedAnswers.forEach(respuesta => {
@@ -66,8 +86,6 @@ export class TestPersonalidadComponent implements OnInit {
     });
     return totalScore;
   }
-
-
 
   submit() {
     const totalScore = this.calculateScore();
@@ -88,12 +106,15 @@ export class TestPersonalidadComponent implements OnInit {
   previousPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
+      this.paginatePreguntas();
     }
   }
 
   nextPage() {
-    if (this.currentPage < this.totalQuestions) {
+    const totalPages = Math.ceil(this.totalQuestions / this.questionsPerPage);
+    if (this.currentPage < totalPages) {
       this.currentPage++;
+      this.paginatePreguntas();
     }
   }
 }

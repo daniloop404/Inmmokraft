@@ -1,0 +1,85 @@
+<div class="home-container">
+    <div #carousel class="carousel slide position-relative" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li [class.active]="i === 0" *ngFor="let slide of slides; let i = index" (click)="selectSlide(i)"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item" [class.active]="currentSlide === i" *ngFor="let slide of slides; let i = index">
+                <img class="d-block w-100" [src]="slide.image" [alt]="slide.alt" (mouseenter)="pauseSlideShow()" (mouseleave)="resumeSlideShow()">
+                <div class="carousel-caption d-none d-md-block">
+                    <div class="overlay">
+                        <h5 style="color: white; font-size: 30px;">{{ slide.title }}</h5>
+                        <p style="font-size: 20px;">{{ slide.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" (click)="prevSlide()" role="button">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </a>
+        <a class="carousel-control-next" (click)="nextSlide()" role="button">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div class="test-info-section">
+        <div class="test-info-text">
+            <h2 class="text-center" style="color: black;">Explorando los Diferentes Formatos de Evaluación</h2>
+            <p class="text-center">Tenemos una amplia variedad de tests educativos que pueden ayudarte a mejorar tus habilidades académicas y a descubrir tu verdadero potencial. Ya seas estudiante de primaria, secundaria, o cualquier usuario interesado en la autoevaluación, tenemos algo para ti.</p>
+            <div class="container">
+                <div class="row align-items-stretch">
+                    <div class="col-lg-4">
+                        <div class="card border-primary h-100 mb-3" style="max-width: 30rem;">
+                            <img src="/assets/images/info.png" class="card-img-top" alt="Imagen para Escala de Likert">
+                            <div class="card-header">Escala de Likert</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Escala de Likert</h5>
+                                <p class="card-text">Este tipo de test te presenta afirmaciones y debes indicar tu grado de acuerdo o desacuerdo con ellas en una escala.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-primary h-100 mb-3" style="max-width: 30rem;">
+                            <img src="/assets/images/info2.png" class="card-img-top" alt="Imagen para Tests Psicológicos">
+                            <div class="card-header">Tests Psicológicos</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Tests Psicológicos</h5>
+                                <p class="card-text">Explora diversos tests diseñados para evaluar aspectos psicológicos como la personalidad, el comportamiento y las actitudes. Ideales para conocerte mejor a ti mismo.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card border-primary h-100 mb-3" style="max-width: 30rem;">
+                            <img src="/assets/images/info3.png" class="card-img-top" alt="Imagen para Tests de Aptitud">
+                            <div class="card-header">Tests de Aptitud</div>
+                            <div class="card-body">
+                                <h5 class="card-title">Tests de Aptitud</h5>
+                                <p class="card-text">Descubre tus fortalezas y debilidades en diferentes áreas con nuestros tests de aptitud. Ideales para prepararte para exámenes y mejorar en tus estudios.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2>Descubre el potencial de tu aprendizaje con nuestros tests educativos</h2>
+                <p>¡Explora nuestra amplia variedad de pruebas diseñadas para ayudarte a mejorar tus habilidades académicas!</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="call-to-action-section mt-5 position-relative">
+        <div class="cta-image" style="position: relative;">
+            <img src="/assets/images/call to action.png" alt="Estudiante feliz estudiando" style="width: 60%; height: auto;">
+            <div class="text-center text-white position-absolute top-50 start-50 translate-middle">
+                <h2 style="color: white; background-color: rgba(0, 0, 0, 0.5)">¡Aprovecha al máximo tus habilidades académicas!</h2>
+                <p style="background-color: rgba(0, 0, 0, 0.5)">Descubre tu verdadero potencial con nuestros tests educativos. ¡Empieza hoy mismo!</p>
+                <button routerLink="/tests" class="btn btn-primary boton">¡Empieza ahora!</button>
+            </div>
+        </div>
+    </div>
+</div>
