@@ -5,7 +5,7 @@ import { UsuariosService } from '../sevicios/usuarios.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AdminGuard implements CanActivate {
+export class UsuarioGuard implements CanActivate {
 
   constructor(private usuariosService: UsuariosService, private router: Router) { }
 
@@ -13,21 +13,10 @@ export class AdminGuard implements CanActivate {
     return new Promise((resolve, reject) => {
       this.usuariosService.getEstadoAutenticacion().subscribe(user => {
         if (user) {
-          this.usuariosService.obtenerDatosUsuario(user.uid)
-            .then((userData: any) => {
-              if (userData.rol && userData.rol.toLowerCase() === 'admin') {
-                resolve(true);
-              } else {
-                this.router.navigate(['/']);
-                resolve(false);
-              }
-            })
-            .catch(error => {
-              console.error('Error al obtener datos del usuario:', error);
-              this.router.navigate(['/']);
-              resolve(false);
-            });
+          // Permitir acceso si el usuario está autenticado
+          resolve(true);
         } else {
+          // Redirigir al inicio de sesión si no está autenticado
           this.router.navigate(['/login']);
           resolve(false);
         }
