@@ -3,7 +3,6 @@ import { ContactoService } from 'src/app/servicios/contacto.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-contacto',
   templateUrl: './contacto.component.html',
