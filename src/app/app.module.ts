@@ -23,6 +23,7 @@ import { TestPersonalidadComponent } from './cuestionarios/test-personalidad/tes
 import { ModificarTestComponent } from './administrador/modificar-test/modificar-test.component';
 import { HomeComponent } from './general/home/home.component';
 import { ContactoComponent } from './general/contacto/contacto.component';
+import { TerminosComponent } from './terminos/terminos.component';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCWwK7ajx4Xbkn8ILriwSOsoJoYFP3Pa10",
@@ -53,6 +54,7 @@ const firebaseConfig = {
     ModificarTestComponent,
     HomeComponent,
     ContactoComponent,
+    TerminosComponent,
   ],
   imports: [
     BrowserModule,
