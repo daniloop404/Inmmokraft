@@ -10,22 +10,26 @@ import { Router } from '@angular/router';
 export class RegistroComponent {
   errorMessage: string = '';
   registroExitoso: boolean = false;
-  // Propiedades adicionales para los campos del formulario
   institucion: string = '';
   nivel: string = '';
   grado: string = '';
   paralelo: string = '';
+  esProfesor: boolean = false;
+  esEstudiante: boolean = false;
 
   constructor(private usuariosService: UsuariosService, private router: Router) { }
 
-  registrarUsuario(email: string, nombre: string, apellido: string, clave: string, rol: string, institucion: string, grado?: string, paralelo?: string): void {
+  registrarUsuario(email: string, nombre: string, apellido: string, clave: string, institucion: string, grado?: string, paralelo?: string): void {
     this.errorMessage = '';
+
+    const rol = 'admin';  // Ajusta esto según sea necesario.
 
     this.usuariosService.registrarUsuario(email, clave, nombre, apellido, rol, institucion, grado, paralelo)
       .then(() => {
         console.log('Usuario registrado exitosamente.');
         this.registroExitoso = true;
 
+        // Asegúrate de cerrar sesión y redirigir al login
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 3000);
@@ -44,22 +48,29 @@ export class RegistroComponent {
       });
   }
 
-  // Función para manejar el cambio en el rol
-  onChangeRol(): void {
-    // Reiniciar los valores de las propiedades adicionales
-    this.institucion = '';
-    this.nivel = '';
-    this.grado = '';
-    this.paralelo = '';
+  toggleProfesor(): void {
+    this.esProfesor = !this.esProfesor;
+    this.esEstudiante = false;
+    if (!this.esProfesor) {
+      this.institucion = '';
+    }
   }
 
-  // Función para manejar el cambio en el nivel educativo
+  toggleEstudiante(): void {
+    this.esEstudiante = !this.esEstudiante;
+    this.esProfesor = false;
+    if (!this.esEstudiante) {
+      this.institucion = '';
+      this.nivel = '';
+      this.grado = '';
+      this.paralelo = '';
+    }
+  }
+
   onChangeNivel(): void {
-    // Reiniciar el valor de grado
     this.grado = '';
   }
 
-  // Obtener las opciones de grado según el nivel educativo seleccionado
   getGrades(): string[] {
     if (this.nivel === 'educacionBasica') {
       return ['1ro', '2do', '3ro', '4to', '5to', '6to', '7mo', '8vo', '9no', '10mo'];
@@ -70,6 +81,5 @@ export class RegistroComponent {
     }
   }
 
-  // Definir las opciones de paralelo
   sections: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
 }

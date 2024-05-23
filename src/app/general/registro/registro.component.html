@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container mb-5">
   <div class="card">
     <div class="card-body">
       <h5 class="card-title text-center">Registro</h5>
-      <form (ngSubmit)="registrarUsuario(email.value, nombre.value, apellido.value, clave.value, rol.value, institucion, grado, paralelo)">
+      <form (ngSubmit)="registrarUsuario(email.value, nombre.value, apellido.value, clave.value, institucion, grado, paralelo)">
         <div class="form-group">
           <label for="email">Correo electrónico</label>
           <input type="email" class="form-control" id="email" placeholder="correo@example.com" required #email>
@@ -19,49 +19,45 @@
           <label for="clave">Contraseña</label>
           <input type="password" class="form-control" id="clave" placeholder="Contraseña" required #clave>
         </div>
-        <!-- Rol -->
-        <div class="form-group">
-          <label for="rol">Rol</label>
-          <select class="form-control" id="rol" required #rol (change)="onChangeRol()">
-            <option value="administrador">Administrador</option>
-            <option value="profesor">Profesor</option>
-            <option value="alumno">Alumno</option>
-          </select>
+        
+        <!-- Botones para rol adicional -->
+        <div class="text-center mt-4">
+          <button type="button" class="btn btn-primary" (click)="toggleProfesor()">Soy Profesor</button>
+          <button type="button" class="btn btn-primary mx-2" (click)="toggleEstudiante()">Soy Estudiante</button>
         </div>
-        <!-- Institución educativa (solo visible para profesor y alumno) -->
-        <div *ngIf="rol.value !== 'administrador'" class="form-group">
+        
+        <!-- Campos adicionales para profesor o estudiante -->
+        <div *ngIf="esProfesor || esEstudiante" class="form-group mt-4">
           <label for="institucion">Institución Educativa</label>
-          <input type="text" class="form-control" id="institucion" placeholder="Institución Educativa" required [(ngModel)]="institucion">
+          <input type="text" class="form-control" id="institucion" placeholder="Institución Educativa" [(ngModel)]="institucion">
         </div>
-        <!-- Nivel educativo -->
-        <div *ngIf="rol.value === 'alumno'" class="form-group">
+        <div *ngIf="esEstudiante" class="form-group">
           <label for="nivel">Nivel Educativo</label>
-          <select class="form-control" id="nivel" required [(ngModel)]="nivel" (change)="onChangeNivel()">
+          <select class="form-control" id="nivel" [(ngModel)]="nivel" (change)="onChangeNivel()">
             <option value="">Selecciona un nivel</option>
             <option value="educacionBasica">Educación Básica</option>
             <option value="bachillerato">Bachillerato</option>
           </select>
         </div>
-        <!-- Grado (solo visible para alumno cuando se selecciona un nivel) -->
-        <div *ngIf="rol.value === 'alumno' && (nivel === 'educacionBasica' || nivel === 'bachillerato')" class="form-group">
+        <div *ngIf="esEstudiante && (nivel === 'educacionBasica' || nivel === 'bachillerato')" class="form-group">
           <label for="grado">Grado</label>
-          <select class="form-control" id="grado" required [(ngModel)]="grado">
+          <select class="form-control" id="grado" [(ngModel)]="grado">
             <option *ngFor="let grade of getGrades()" [value]="grade">{{ grade }}</option>
           </select>
         </div>
-        <!-- Paralelo (solo visible para alumno) -->
-        <div *ngIf="rol.value === 'alumno'" class="form-group">
+        <div *ngIf="esEstudiante" class="form-group">
           <label for="paralelo">Paralelo</label>
-          <select class="form-control" id="paralelo" required [(ngModel)]="paralelo">
+          <select class="form-control" id="paralelo" [(ngModel)]="paralelo">
             <option *ngFor="let section of sections" [value]="section">{{ section }}</option>
           </select>
         </div>
+        
         <!-- Mostrar el mensaje de error -->
         <div *ngIf="errorMessage" class="alert alert-danger mt-4">{{ errorMessage }}</div>
         <!-- Mostrar el mensaje de éxito -->
         <div *ngIf="registroExitoso" class="alert alert-success mt-4">¡Registro exitoso! Serás redirigido al inicio de sesión.</div>
         <div class="text-center mt-4">
-          <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+          <button type="submit" class="btn btn-primary btn-success">Registrarse</button>
         </div>
       </form>
     </div>

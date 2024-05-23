@@ -9,27 +9,29 @@ import { ModificarCuestionarioComponent } from './administrador/modificar-cuesti
 import { RegistroComponent } from './general/registro/registro.component';
 import { LoginComponent } from './general/login/login.component';
 import { PerfilComponent } from './usuarios/perfil/perfil.component';
-import { ProfesorGuard } from './guards/profesor.guard';
 import { IngresarTestpersonalidadComponent } from './administrador/ingresar-testpersonalidad/ingresar-testpersonalidad.component';
 import { TestPersonalidadComponent } from './cuestionarios/test-personalidad/test-personalidad.component';
 import { ModificarTestComponent } from './administrador/modificar-test/modificar-test.component';
 import { HomeComponent } from './general/home/home.component';
 import { ContactoComponent } from './general/contacto/contacto.component';
+import { AdminGuard } from './guards/administrador.guard';
+import { UsuarioGuard } from './guards/usuario.guard';
+import { NoAuthGuard } from './guards/noauth.guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent},
-  { path: 'cuestionarios', component: ListadoComponent},
-  { path: 'cuestionario/:id', component: CuestionarioComponent }, // Agregamos un parámetro de ruta dinámico ":id"
-  { path: 'modificar-cuestionario/:id', component:ModificarCuestionarioComponent},
-  { path: 'ingresar-cuestionarios', component: IngresarCuestionariosComponent},
-  { path: 'registro', component:RegistroComponent},
-  { path: 'login', component:LoginComponent},
-  { path: 'administrador', component: PanelComponent},
-  { path: 'perfil', component: PerfilComponent},
-  { path: 'ingreso-test', component:IngresarTestpersonalidadComponent},
-  { path: 'test-personalidad/:id', component:TestPersonalidadComponent},
-  { path: 'test-personalidad-modificar/:id', component:ModificarTestComponent},
-  { path: 'contacto', component: ContactoComponent},
+  { path: '', component: HomeComponent },
+  { path: 'cuestionarios', component: ListadoComponent, canActivate: [UsuarioGuard] },
+  { path: 'cuestionario/:id', component: CuestionarioComponent },
+  { path: 'modificar-cuestionario/:id', component: ModificarCuestionarioComponent, canActivate: [AdminGuard] },
+  { path: 'ingresar-cuestionarios', component: IngresarCuestionariosComponent, canActivate: [AdminGuard] },
+  { path: 'registro', component: RegistroComponent, canActivate: [NoAuthGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [NoAuthGuard] },
+  { path: 'administrador', component: PanelComponent, canActivate: [AdminGuard] },
+  { path: 'perfil', component: PerfilComponent, canActivate: [UsuarioGuard] },
+  { path: 'ingreso-test', component: IngresarTestpersonalidadComponent, canActivate: [AdminGuard] },
+  { path: 'test-personalidad/:id', component: TestPersonalidadComponent },
+  { path: 'test-personalidad-modificar/:id', component: ModificarTestComponent, canActivate: [AdminGuard] },
+  { path: 'contacto', component: ContactoComponent },
 
   
 

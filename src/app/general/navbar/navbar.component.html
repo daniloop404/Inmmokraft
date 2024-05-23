@@ -7,9 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarColor02">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="/">Home
-            <span class="visually-hidden">(current)</span>
-          </a>
+          <a class="nav-link active" href="/">Home <span class="visually-hidden">(current)</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="contacto">Contacto</a>
@@ -17,23 +15,20 @@
         <li class="nav-item">
           <a class="nav-link" href="cuestionarios">Cuestionarios</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="rol === 'admin'">
           <a class="nav-link" href="administrador">Administrador</a>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
-        <!-- Mostrar el nombre del usuario si está autenticado -->
         <li class="nav-item" *ngIf="isUserLoggedIn">
           <span class="nav-link">¡Hola, {{ userName }}!</span>
         </li>
         <li class="nav-item" *ngIf="isUserLoggedIn">
-          <a class="nav-link" href="perfil">perfil</a>
+          <a class="nav-link" href="perfil">Perfil</a>
         </li>
-        <!-- Mostrar el botón de salir si el usuario está autenticado -->
         <li class="nav-item" *ngIf="isUserLoggedIn">
           <a class="nav-link" (click)="cerrarSesion()" style="cursor: pointer;">Salir</a>
         </li>
-        <!-- Mostrar los botones de registro y login si el usuario no está autenticado -->
         <li class="nav-item" *ngIf="!isUserLoggedIn">
           <a class="nav-link" href="login">Login</a>
         </li>
