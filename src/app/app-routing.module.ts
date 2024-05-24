@@ -17,6 +17,7 @@ import { ContactoComponent } from './general/contacto/contacto.component';
 import { AdminGuard } from './guards/administrador.guard';
 import { UsuarioGuard } from './guards/usuario.guard';
 import { NoAuthGuard } from './guards/noauth.guard';
+import { TerminosComponent } from './terminos/terminos.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'test-personalidad/:id', component: TestPersonalidadComponent },
   { path: 'test-personalidad-modificar/:id', component: ModificarTestComponent, canActivate: [AdminGuard] },
   { path: 'contacto', component: ContactoComponent },
+  { path: 'terminos', component: TerminosComponent},
 
   
 
