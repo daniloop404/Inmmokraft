@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CuestionariosService } from '../cuestionarios.service';
+import { CuestionariosService } from '../../servicios/cuestionarios.service';
+import { ResultadosService } from '../../servicios/resultados.service';
+import { UsuariosService } from '../../servicios/usuarios.service';
 
 interface Option {
   text: string;
@@ -37,10 +39,13 @@ export class CuestionarioComponent implements OnInit {
   selectedAnswers: Map<number, string | null>[] = [];
   cuestionario: Cuestionario | null = null;
   hoveredOption: Option | null = null;
+  uid: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private cuestionariosService: CuestionariosService
+    private cuestionariosService: CuestionariosService,
+    private resultadosService: ResultadosService,
+    private usuariosService: UsuariosService
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +60,13 @@ export class CuestionarioComponent implements OnInit {
           this.paginateQuestions();
         }
       });
+    });
+
+    // Obtener el UID del usuario autenticado
+    this.usuariosService.getEstadoAutenticacion().subscribe(user => {
+      if (user) {
+        this.uid = user.uid;
+      }
     });
   }
 
@@ -88,11 +100,25 @@ export class CuestionarioComponent implements OnInit {
   }
 
   submit() {
+    if (!this.uid) {
+      alert('Usuario no autenticado');
+      return;
+    }
+
     let totalScore = 0;
     this.cuestionario?.questions.forEach(question => {
       totalScore += this.handleQuestion(question);
     });
+    
     alert(`Respondiste ${totalScore} de ${this.totalQuestions} preguntas correctamente.`);
+    
+    // Guardar los resultados en la base de datos
+    const cuestionarioId = this.route.snapshot.paramMap.get('id')!;
+    this.resultadosService.guardarResultadosCuestionario(this.uid, cuestionarioId, this.totalQuestions, totalScore).subscribe(() => {
+      console.log('Resultados guardados exitosamente');
+    }, error => {
+      console.error('Error al guardar los resultados:', error);
+    });
   }
 
   previousPage() {

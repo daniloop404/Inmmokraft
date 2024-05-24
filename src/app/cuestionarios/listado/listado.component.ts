@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CuestionariosService } from '../cuestionarios.service';
+import { CuestionariosService } from '../../servicios/cuestionarios.service';
 import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.service'; // Importar el servicio de test de personalidad
 import { Router } from '@angular/router';
 

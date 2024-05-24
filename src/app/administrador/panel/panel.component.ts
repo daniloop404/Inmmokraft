@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CuestionariosService } from 'src/app/cuestionarios/cuestionarios.service';
+import { CuestionariosService } from 'src/app/servicios/cuestionarios.service';
 import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.service';
 import { ContactoService } from 'src/app/servicios/contacto.service';
 

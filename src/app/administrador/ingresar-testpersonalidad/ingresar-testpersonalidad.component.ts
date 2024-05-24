@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.service';
 
 @Component({
@@ -10,19 +10,18 @@ import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.ser
 export class IngresarTestpersonalidadComponent {
   testPersonalidadForm: FormGroup;
   testGuardado: boolean = false;
-  opcionesTexto = ['En desacuerdo totalmente (1)', 'En desacuerdo (2)', 'Ni en desacuerdo ni en acuerdo (3)', 'En acuerdo (4)', 'En total acuerdo (5)'];
   puntajeTotal: number;
   imagePreviews: string[] = [];
-  portadaPreview: string | null = null; // Previsualización de la imagen de portada
+  portadaPreview: string | null = null;
 
   constructor(private formBuilder: FormBuilder, private testPersonalidadService: TestPersonalidadService) {
     this.testPersonalidadForm = this.formBuilder.group({
       nombreTest: ['', Validators.required],
       categoria: ['', Validators.required],
-      portada: [null], // Campo para la imagen de portada
+      portada: [null],
       preguntas: this.formBuilder.array([]),
       rangosPuntaje: this.formBuilder.array([])
-  });
+    });
 
     this.addPregunta();
     this.puntajeTotal = this.preguntas.length * 5;
@@ -38,11 +37,9 @@ export class IngresarTestpersonalidadComponent {
       opciones: this.formBuilder.array([
         this.createOpcion(),
         this.createOpcion(),
-        this.createOpcion(),
-        this.createOpcion(),
         this.createOpcion()
       ]),
-      imagenPregunta: [''] // Agregar campo para la imagen de la pregunta
+      imagenPregunta: ['']
     });
 
     this.preguntas.push(pregunta);
@@ -51,7 +48,8 @@ export class IngresarTestpersonalidadComponent {
 
   createOpcion() {
     return this.formBuilder.group({
-      opcion: [null]
+      textoOpcion: ['', Validators.required],
+      puntaje: [null, Validators.required]
     });
   }
 
@@ -62,40 +60,36 @@ export class IngresarTestpersonalidadComponent {
 
   async onSubmit() {
     if (!this.isFormValid()) {
-      console.error('Por favor complete todos los campos obligatorios.');
-      return;
+        return; // Detiene la ejecución si el formulario no es válido
     }
-    
+
     const confirmacion = confirm('¿Está seguro de que desea guardar el Test de Personalidad?');
     if (confirmacion) {
       const nuevoTest = { ...this.testPersonalidadForm.value, tipocuestionario: 'testpersonalidad' };
-  
-      // Subir la imagen de cada pregunta y guardar su URL en el objeto
+
       const uploads = [];
       for (let i = 0; i < nuevoTest.preguntas.length; i++) {
         const pregunta = nuevoTest.preguntas[i];
         if (pregunta.imagenPregunta) {
           const file = pregunta.imagenPregunta;
           const uploadTask = this.testPersonalidadService.uploadImage(file).then(url => {
-            pregunta.imagenPregunta = url; // Guardar la URL en el objeto
+            pregunta.imagenPregunta = url;
           });
           uploads.push(uploadTask);
         }
       }
 
-      // Subir la imagen de portada y guardar su URL en el objeto
       if (nuevoTest.portada) {
         const portadaFile = nuevoTest.portada;
         const uploadPortadaTask = this.testPersonalidadService.uploadImage(portadaFile).then(url => {
-          nuevoTest.portada = url; // Guardar la URL en el objeto
+          nuevoTest.portada = url;
         });
         uploads.push(uploadPortadaTask);
       }
-  
+
       try {
-        // Esperar a que todas las cargas de imágenes se completen antes de guardar el test
         await Promise.all(uploads);
-  
+
         this.testPersonalidadService.postTestPersonalidad(nuevoTest).subscribe(
           (response) => {
             console.log('Test de Personalidad guardado exitosamente:', response);
@@ -118,30 +112,27 @@ export class IngresarTestpersonalidadComponent {
     }
   }
 
-  customTrackBy(index: number, obj: any): any {
-    return index;
-  }
-
   isFormValid(): boolean {
     if (this.testPersonalidadForm.invalid) {
-      return false;
-    }
-
-    const controls = this.testPersonalidadForm.controls;
-    for (const field in controls) {
-      if (controls[field].invalid) {
         return false;
-      }
     }
 
     const preguntas = this.preguntas.controls;
     for (const pregunta of preguntas) {
-      if (pregunta.invalid) {
-        return false;
-      }
+        const opciones = pregunta.get('opciones') as FormArray;
+        const puntajes = opciones.controls.map(opcion => opcion.get('puntaje')?.value);
+        const textosOpcion = opciones.controls.map(opcion => opcion.get('textoOpcion')?.value);
+
+        if (puntajes.includes(null) || textosOpcion.includes('') || !this.isOpcionesPuntajesUnicos(opciones)) {
+            return false;
+        }
     }
 
     return true;
+}
+
+  customTrackBy(index: number, obj: any): any {
+    return index;
   }
 
   get rangosPuntaje() {
@@ -161,13 +152,11 @@ export class IngresarTestpersonalidadComponent {
     this.rangosPuntaje.removeAt(index);
   }
 
-  // Función para manejar la carga de imágenes de preguntas
   onImageUpload(event: any, preguntaIndex: number) {
     const file = event.target.files[0];
     const pregunta = this.preguntas.at(preguntaIndex);
     pregunta.get('imagenPregunta')?.setValue(file);
 
-    // Mostrar previsualización de la imagen
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreviews[preguntaIndex] = reader.result as string;
@@ -175,16 +164,18 @@ export class IngresarTestpersonalidadComponent {
     reader.readAsDataURL(file);
   }
 
-  // Función para manejar la carga de la imagen de portada
   onPortadaUpload(event: any) {
     const file = event.target.files[0];
     this.testPersonalidadForm.get('portada')?.setValue(file);
 
-    // Mostrar previsualización de la imagen de portada
     const reader = new FileReader();
     reader.onload = () => {
       this.portadaPreview = reader.result as string;
     };
     reader.readAsDataURL(file);
   }
+  isOpcionesPuntajesUnicos(opciones: FormArray): boolean {
+    const puntajes = opciones.controls.map(opcion => opcion.get('puntaje')?.value);
+    return new Set(puntajes).size === puntajes.length;
+}
 }

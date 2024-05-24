@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.service';
+import { ResultadosService } from 'src/app/servicios/resultados.service';
+import { UsuariosService } from 'src/app/servicios/usuarios.service';
 
 interface Pregunta {
   id: string;
@@ -27,10 +29,13 @@ export class TestPersonalidadComponent implements OnInit {
   totalQuestions: number = 0;
   selectedAnswers: RespuestaSeleccionada[] = [];
   hoveredOption: string | null = null;
+  uid: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private testPersonalidadService: TestPersonalidadService
+    private testPersonalidadService: TestPersonalidadService,
+    private resultadosService: ResultadosService,
+    private usuariosService: UsuariosService
   ) { }
 
   ngOnInit(): void {
@@ -44,6 +49,13 @@ export class TestPersonalidadComponent implements OnInit {
           this.paginatePreguntas();
         }
       });
+    });
+
+    // Obtener el UID del usuario autenticado
+    this.usuariosService.getEstadoAutenticacion().subscribe(user => {
+      if (user) {
+        this.uid = user.uid;
+      }
     });
   }
 
@@ -88,9 +100,22 @@ export class TestPersonalidadComponent implements OnInit {
   }
 
   submit() {
+    if (!this.uid) {
+      alert('Usuario no autenticado');
+      return;
+    }
+
     const totalScore = this.calculateScore();
     const resultado = this.getRangeResult(totalScore);
     alert(`Tu puntaje es ${totalScore}. ${resultado}`);
+
+    // Guardar los resultados en la base de datos
+    const testPersonalidadId = this.route.snapshot.paramMap.get('id')!;
+    this.resultadosService.guardarResultadosTestPersonalidad(this.uid, testPersonalidadId, totalScore, resultado).subscribe(() => {
+      console.log('Resultados del test de personalidad guardados exitosamente');
+    }, error => {
+      console.error('Error al guardar los resultados del test de personalidad:', error);
+    });
   }
 
   getRangeResult(score: number): string {
