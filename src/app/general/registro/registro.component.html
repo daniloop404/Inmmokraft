@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       <h5 class="card-title text-center">Registro</h5>
-      <form (ngSubmit)="registrarUsuario(email.value, nombre.value, apellido.value, clave.value, institucion, grado, paralelo)">
+      <form (ngSubmit)="registrarUsuario(email.value, nombre.value, apellido.value, clave.value, confirmarClave.value, institucion, grado, paralelo)">
         <div class="form-group">
           <label for="email">Correo electrónico</label>
           <input type="email" class="form-control" id="email" placeholder="correo@example.com" required #email>
@@ -19,13 +19,17 @@
           <label for="clave">Contraseña</label>
           <input type="password" class="form-control" id="clave" placeholder="Contraseña" required #clave>
         </div>
-        
+        <div class="form-group">
+          <label for="confirmarClave">Confirmar Contraseña</label>
+          <input type="password" class="form-control" id="confirmarClave" placeholder="Confirmar Contraseña" required #confirmarClave>
+        </div>
+
         <!-- Botones para rol adicional -->
         <div class="text-center mt-4">
           <button type="button" class="btn btn-primary" (click)="toggleProfesor()">Soy Profesor</button>
           <button type="button" class="btn btn-primary mx-2" (click)="toggleEstudiante()">Soy Estudiante</button>
         </div>
-        
+
         <!-- Campos adicionales para profesor o estudiante -->
         <div *ngIf="esProfesor || esEstudiante" class="form-group mt-4">
           <label for="institucion">Institución Educativa</label>
@@ -51,11 +55,11 @@
             <option *ngFor="let section of sections" [value]="section">{{ section }}</option>
           </select>
         </div>
-        
+
         <!-- Mostrar el mensaje de error -->
         <div *ngIf="errorMessage" class="alert alert-danger mt-4">{{ errorMessage }}</div>
         <!-- Mostrar el mensaje de éxito -->
-        <div *ngIf="registroExitoso" class="alert alert-success mt-4">¡Registro exitoso! Serás redirigido al inicio de sesión.</div>
+        <div *ngIf="registroExitoso" class="alert alert-success mt-4">¡Usuario registrado exitosamente! Ahora puedes iniciar sesión.</div>
         <div class="text-center mt-4">
           <button type="submit" class="btn btn-primary btn-success">Registrarse</button>
         </div>

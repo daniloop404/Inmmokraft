@@ -7,15 +7,24 @@
         <div class="form-group">
             <label for="nombreTest">Nombre del Test</label>
             <input type="text" class="form-control" id="nombreTest" formControlName="nombreTest">
+            <div *ngIf="testPersonalidadForm.get('nombreTest').hasError('required')" class="text-danger">
+                El nombre del test es obligatorio.
+            </div>
         </div>
         <div class="form-group">
             <label for="categoria">Descripción</label>
             <input type="text" class="form-control" id="categoria" formControlName="categoria">
+            <div *ngIf="testPersonalidadForm.get('categoria').hasError('required')" class="text-danger">
+                La descripción del test es obligatoria.
+            </div>
         </div>
         <div class="form-group">
             <label for="portada">Cargar imagen de portada (opcional)</label>
             <input type="file" class="form-control" (change)="onPortadaUpload($event)" id="portada">
-            <img *ngIf="portadaPreview" [src]="portadaPreview" class="img-fluid mt-2" alt="Previsualización de la imagen de portada">
+            <div class="text-center">
+                <img *ngIf="portadaPreview" [src]="portadaPreview" class="img-fluid mt-2" alt="Previsualización de la imagen de portada" style="height: auto; width: 400px;">
+            </div>
+            
         </div>
         <div class="text-center mb-3 mt-3">
             <h4>Ingresa las preguntas</h4>
@@ -32,23 +41,37 @@
                         <div [id]="'collapse' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="form-group mb-3">
+                                    <label [for]="'tipoPregunta' + i">Tipo de Pregunta</label>
+                                    <select class="form-control" [id]="'tipoPregunta' + i" formControlName="tipoPregunta" (change)="onTipoPreguntaChange(i)">
+                                        <option value="multiple">Opción Múltiple</option>
+                                        <option value="siNo">Sí / No</option>
+                                        <option value="rango">Rango (1-10)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
                                     <label [for]="'textoPregunta' + i">Ingresa aquí la pregunta</label>
                                     <input type="text" class="form-control" [id]="'textoPregunta' + i" formControlName="textoPregunta">
+                                    <div *ngIf="pregunta.get('textoPregunta').hasError('required')" class="text-danger">
+                                        El texto de la pregunta es obligatorio.
+                                    </div>
                                 </div>
-
                                 <div class="form-group mb-3">
                                     <label [for]="'imagenPregunta' + i">Cargar imagen (opcional)</label>
                                     <input type="file" class="form-control" (change)="onImageUpload($event, i)" [id]="'imagenPregunta' + i">
-                                    <img *ngIf="imagePreviews[i]" [src]="imagePreviews[i]" class="img-fluid mt-2" alt="Previsualización de la imagen">
+                                    <div class="text-center">
+                                        <img *ngIf="imagePreviews[i]" [src]="imagePreviews[i]" class="img-fluid mt-2" alt="Previsualización de la imagen" style="height: auto; width: 400px;">
+                                    </div>
                                 </div>
-
-                                <div formArrayName="opciones">
+                                <div *ngIf="pregunta.get('tipoPregunta').value === 'multiple'" formArrayName="opciones">
                                     <div *ngFor="let opcion of pregunta.get('opciones')['controls']; let j=index; trackBy: customTrackBy" [formGroupName]="j">
                                         <div class="card border-primary mb-3">
                                             <div class="card-body">
                                                 <div class="form-group">
                                                     <label [for]="'textoOpcion' + i + j">Opción {{ j + 1 }}</label>
                                                     <input type="text" class="form-control" [id]="'textoOpcion' + i + j" formControlName="textoOpcion">
+                                                    <div *ngIf="opcion.get('textoOpcion').hasError('required')" class="text-danger">
+                                                        El texto de la opción es obligatorio.
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label [for]="'puntaje' + i + j">Puntaje</label>
@@ -57,14 +80,37 @@
                                                         <option [value]="3">3</option>
                                                         <option [value]="5">5</option>
                                                     </select>
+                                                    <div *ngIf="opcion.get('puntaje').hasError('required')" class="text-danger">
+                                                        El puntaje de la opción es obligatorio.
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div *ngIf="!this.isPreguntaValid(pregunta) && (pregunta.get('textoPregunta').touched || pregunta.get('opciones').dirty)" class="alert alert-danger" role="alert">
+                                        Los puntajes de cada opción deben ser diferentes y todos los campos obligatorios deben estar llenos.
+                                    </div>
                                 </div>
-                                
-                                <div *ngIf="!isFormValid() && (pregunta.get('textoPregunta').touched || pregunta.get('opciones').dirty)" class="alert alert-danger" role="alert">
-                                    Los puntajes de cada opción deben ser diferentes y todos los campos obligatorios deben estar llenos.
+                                <div *ngIf="pregunta.get('tipoPregunta').value === 'siNo'">
+                                    <div class="form-group">
+                                        <label>Opciones</label>
+                                        <div class="card border-primary mb-3">
+                                            <div class="card-body">
+                                                <p class="mb-0">Sí (5 puntos)</p>
+                                            </div>
+                                        </div>
+                                        <div class="card border-primary mb-3">
+                                            <div class="card-body">
+                                                <p class="mb-0">No (1 punto)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="pregunta.get('tipoPregunta').value === 'rango'">
+                                    <div class="form-group">
+                                        <label>Escala del 1 al 10</label>
+                                        <p>El usuario calificará del 1 al 10 en esta pregunta</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -82,40 +128,65 @@
         <div class="text-center mt-3 mb-3">
             <h4>Puntaje Máximo: {{ puntajeTotal }}</h4>
         </div>
-        
         <div class="text-center mt-3 mb-3">
             <h4>Rangos de Puntaje</h4>
             <div formArrayName="rangosPuntaje">
-                <div *ngFor="let rango of rangosPuntaje.controls; let i=index" [formGroupName]="i">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <label for="rangoMenor{{i}}">Rango Menor</label>
-                            <input type="number" class="form-control" id="rangoMenor{{i}}" formControlName="rangoMenor">
-                        </div>
-                        <div class="col">
-                            <label for="rangoMayor{{i}}">Rango Mayor</label>
-                            <input type="number" class="form-control" id="rangoMayor{{i}}" formControlName="rangoMayor">
-                        </div>
-                        <div class="col">
-                            <label for="resultadoRango{{i}}">Resultado</label>
-                            <input type="text" class="form-control" id="resultadoRango{{i}}" formControlName="resultado">
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" class="btn btn-danger" (click)="deleteRango(i)">Eliminar</button>
+                <div *ngFor="let rango of rangosPuntaje.controls; let i=index" [formGroupName]="i" class="mb-3"> 
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="rangoMenor{{i}}">Rango Menor</label>
+                                        <input type="number" class="form-control" id="rangoMenor{{i}}" formControlName="rangoMenor" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="rangoMayor{{i}}">Rango Mayor</label>
+                                        <input type="number" class="form-control" id="rangoMayor{{i}}" formControlName="rangoMayor" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="resultadoRango{{i}}">Título del Resultado</label>
+                                        <input type="text" class="form-control" id="resultadoRango{{i}}" formControlName="resultado" [value]="rango.get('resultado')?.value">
+                                        <div *ngIf="rango.get('resultado').hasError('required')" class="text-danger">
+                                            El título del resultado es obligatorio.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="descripcionRango{{i}}">Descripción del Resultado</label>
+                                        <textarea class="form-control" id="descripcionRango{{i}}" formControlName="descripcion" rows="3" [value]="rango.get('descripcion')?.value"></textarea>
+                                        <div *ngIf="rango.get('descripcion').hasError('required')" class="text-danger">
+                                            La descripción del resultado es obligatoria.
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="imagenRango{{i}}">Cargar imagen del resultado (opcional)</label>
+                                        <input type="file" class="form-control" (change)="onRangoImageUpload($event, i)" id="imagenRango{{i}}">
+                                        <div class="text-center">
+                                            <img *ngIf="rangoImagePreviews[i]" [src]="rangoImagePreviews[i]" class="img-fluid mt-2" alt="Previsualización de la imagen" style="height: auto; width: 400px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="text-center mt-3">
-                <button type="button" class="btn btn-primary" (click)="addRango()">Agregar Rango</button>
-            </div>
+        </div>
+        <div *ngIf="mostrarMensajeErrorGeneral" class="alert alert-danger" role="alert">
+            Por favor complete todos los campos obligatorios del formulario.
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-success mb-4 mt-5">Guardar Test</button>
         </div>
+        <div *ngIf="subiendoTest" class="alert alert-info mt-3" role="alert">
+            Subiendo test...
+          </div>
+          <div *ngIf="testSubido" class="alert alert-success mt-3" role="alert">
+            Test subido correctamente!
+          </div>
     </form>
-    <div *ngIf="!testPersonalidadForm.valid && testPersonalidadForm.touched" class="alert alert-danger" role="alert">
-        Por favor complete todos los campos obligatorios.
-    </div>
 </div>

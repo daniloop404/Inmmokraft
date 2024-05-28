@@ -19,20 +19,30 @@ export class RegistroComponent {
 
   constructor(private usuariosService: UsuariosService, private router: Router) { }
 
-  registrarUsuario(email: string, nombre: string, apellido: string, clave: string, institucion: string, grado?: string, paralelo?: string): void {
+  registrarUsuario(email: string, nombre: string, apellido: string, clave: string, confirmarClave: string, institucion: string, grado?: string, paralelo?: string): void {
     this.errorMessage = '';
 
-    const rol = 'admin';  // Ajusta esto según sea necesario.
+    // Verificar si las contraseñas coinciden
+    if (clave !== confirmarClave) {
+      this.errorMessage = 'Las contraseñas no coinciden.';
+      return;
+    }
+
+    const rol = 'user';  // Ajusta esto según sea necesario.
 
     this.usuariosService.registrarUsuario(email, clave, nombre, apellido, rol, institucion, grado, paralelo)
       .then(() => {
         console.log('Usuario registrado exitosamente.');
         this.registroExitoso = true;
 
-        // Asegúrate de cerrar sesión y redirigir al login
+        // Cierra la sesión
+        this.usuariosService.cerrarSesion();
+
+        // Mostrar mensaje de éxito y luego redirigir
         setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000);
+          this.registroExitoso = false; // Restablece el mensaje de éxito
+          this.router.navigate(['/login']); 
+        }, 3000); // Cambia el tiempo a 3000 ms (3 segundos)
       })
       .catch(error => {
         console.error('Error al registrar el usuario:', error);
@@ -47,7 +57,6 @@ export class RegistroComponent {
         }
       });
   }
-
   toggleProfesor(): void {
     this.esProfesor = !this.esProfesor;
     this.esEstudiante = false;

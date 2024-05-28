@@ -25,14 +25,14 @@ import { HomeComponent } from './general/home/home.component';
 import { ContactoComponent } from './general/contacto/contacto.component';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCWwK7ajx4Xbkn8ILriwSOsoJoYFP3Pa10",
-  authDomain: "cuestionarios-24d7b.firebaseapp.com",
-  databaseURL: "https://cuestionarios-24d7b-default-rtdb.firebaseio.com",
-  projectId: "cuestionarios-24d7b",
-  storageBucket: "cuestionarios-24d7b.appspot.com",
-  messagingSenderId: "91160597427",
-  appId: "1:91160597427:web:3da8443edb1504be21f1c6",
-  measurementId: "G-P7NKJ9YTHY"
+  apiKey: "AIzaSyClGhBZ4h2OuofeXFFOgM-Iu1XFjXbt1po",
+  authDomain: "tests-de-personalidad.firebaseapp.com",
+  databaseURL: "https://tests-de-personalidad-default-rtdb.firebaseio.com",
+  projectId: "tests-de-personalidad",
+  storageBucket: "tests-de-personalidad.appspot.com",
+  messagingSenderId: "6296182257",
+  appId: "1:6296182257:web:802a93df4616a34d62b850",
+  measurementId: "G-JRGYH0V9XR"
 };
 
 @NgModule({

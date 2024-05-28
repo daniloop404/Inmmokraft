@@ -1,30 +1,5 @@
 <div class="text-center mt-5">
-  <h2>Test de opción múltiple o Verdadero/Falso</h2>
-  <button class="btn btn-success" (click)="agregarCuestionario()">Agregar</button>
-  <button class="btn btn-primary mx-2" (click)="toggleSeccion('cuestionarios')">
-    {{ mostrarCuestionarios ? 'Ocultar' : 'Mostrar' }} Cuestionarios
-  </button>
-</div>
-<div class="container mt-3" *ngIf="mostrarCuestionarios">
-  <div class="row">
-    <div class="col-md-4" *ngFor="let cuestionario of cuestionarios">
-      <div class="card mb-4 shadow-sm">
-        <div class="card-body text-center">
-          <h5 class="card-title">{{ cuestionario.nombrecuestionario }}</h5>
-          <div class="card-image mt-2 mb-2" [ngStyle]="{'background-image': 'url(' + cuestionario.portadaUrl+ ')'}"></div>
-          <p class="card-text">Descripción: {{ cuestionario.category }}</p>
-          <div class="d-flex justify-content-between align-items-center mt-3">
-            <button class="btn btn-danger" (click)="eliminarCuestionario(cuestionario.id)">Eliminar</button>
-            <button class="btn btn-warning mx-2" (click)="modificarCuestionario(cuestionario.id)">Modificar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="text-center mt-5">
-  <h2>Escala de Likert</h2>
+  <h2>Test de personalidad</h2>
   <button class="btn btn-success" (click)="agregarTestPersonalidad()">Agregar</button>
   <button class="btn btn-primary mx-2" (click)="toggleSeccion('testsPersonalidad')">
     {{ mostrarTestsPersonalidad ? 'Ocultar' : 'Mostrar' }} Tests de Personalidad

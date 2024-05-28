@@ -2,7 +2,7 @@
   background-size: cover;
   background-repeat: repeat-x;
   background-position: center;
-  height: 200px;
+  height: 250px; /* Aumenta la altura */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,68 +19,122 @@
 }
 
 .card-container {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .card {
-    width: 100%;
-    max-width: 1200px;
-    background-color: #fff;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .card-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-  }
-  
-  .card-body {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .question-section {
-    flex: 1;
-    padding-right: 20px;
-  }
-  
-  .option-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    padding: 8px;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-  }
-  
-  .option-container:hover {
-    background-color: #e9ecef;
-  }
-  
-  .option-container input[type="radio"] {
-    margin-right: 8px;
-  }
-  
-  .option-container label {
-    margin-bottom: 0;
-  }
-  
-  .image-section {
-    flex: 0 0 auto;
-    max-width: 40%;
-    min-width: 300px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .img-fluid {
-    max-height: 300px;
-    object-fit: contain;
-  }
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 1200px;
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.card-header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.card-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.question-section {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.option-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+}
+
+.option-container:hover {
+  background-color: #e9ecef;
+}
+
+.option-container input[type="radio"] {
+  margin-right: 8px;
+}
+
+.option-container label {
+  margin-bottom: 0;
+}
+
+.image-section {
+  flex: 0 0 auto;
+  max-width: 40%;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-fluid {
+  max-height: 350px;
+  object-fit: contain;
+}
+.range-values {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #333;
+}
+
+.range-value {
+  position: absolute;
+  bottom: 0;
+  transform: translateY(100%);
+}
+
+/* Estilos para el overlay de resultados */
+.results-overlay {
+  position: fixed; /* Overlay sobre todo el viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscurecido */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegúrate de que esté encima de otros elementos */
+}
+
+.results-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 600px;
+}
+
+.results-title {
+  font-size: 2.5rem; /* Aumenta el tamaño del título */
+  margin-bottom: 20px;
+}
+
+.results-description {
+  font-size: 1.2rem; /* Aumenta el tamaño de la descripción */
+  margin-bottom: 20px;
+}
+
+.results-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}

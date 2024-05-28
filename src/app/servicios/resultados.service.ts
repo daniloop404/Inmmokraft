@@ -7,7 +7,7 @@ import { switchMap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ResultadosService {
-  private API_USUARIOS = "https://cuestionarios-24d7b-default-rtdb.firebaseio.com/usuarios";
+  private API_USUARIOS = "https://tests-de-personalidad-default-rtdb.firebaseio.com/usuarios";
 
   constructor(private http: HttpClient) {}
 

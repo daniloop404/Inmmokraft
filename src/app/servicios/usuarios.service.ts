@@ -11,7 +11,7 @@ export class UsuariosService {
 
   constructor(private afAuth: AngularFireAuth, private http: HttpClient) { }
 
-  private API_USUARIOS = "https://cuestionarios-24d7b-default-rtdb.firebaseio.com/usuarios";
+  private API_USUARIOS = "https://tests-de-personalidad-default-rtdb.firebaseio.com/usuarios";
 
   registrarUsuario(email: string, password: string, nombre: string, apellido: string, rol: string, institucion: string, grado?: string, paralelo?: string): Promise<any> {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
