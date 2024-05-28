@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ContactoService {
-  private API_CONTACTOS = 'https://cuestionarios-24d7b-default-rtdb.firebaseio.com/contactos';
+  private API_CONTACTOS = 'https://tests-de-personalidad-default-rtdb.firebaseio.com/contactos';
 
   constructor(private http: HttpClient) { }
 

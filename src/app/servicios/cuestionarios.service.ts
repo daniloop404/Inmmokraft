@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class CuestionariosService {
-  private API_CUESTIONARIOS = 'https://cuestionarios-24d7b-default-rtdb.firebaseio.com/cuestionarios';
+  private API_CUESTIONARIOS = 'https://tests-de-personalidad-default-rtdb.firebaseio.com/cuestionarios';
 
   constructor(private http: HttpClient, private storage: AngularFireStorage) { }
 

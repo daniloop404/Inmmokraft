@@ -21,7 +21,7 @@ import { NoAuthGuard } from './guards/noauth.guard';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'cuestionarios', component: ListadoComponent, canActivate: [UsuarioGuard] },
-  { path: 'cuestionario/:id', component: CuestionarioComponent },
+  { path: 'cuestionario/:id', component: CuestionarioComponent, canActivate: [UsuarioGuard] },
   { path: 'modificar-cuestionario/:id', component: ModificarCuestionarioComponent, canActivate: [AdminGuard] },
   { path: 'ingresar-cuestionarios', component: IngresarCuestionariosComponent, canActivate: [AdminGuard] },
   { path: 'registro', component: RegistroComponent, canActivate: [NoAuthGuard] },
@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'administrador', component: PanelComponent, canActivate: [AdminGuard] },
   { path: 'perfil', component: PerfilComponent, canActivate: [UsuarioGuard] },
   { path: 'ingreso-test', component: IngresarTestpersonalidadComponent, canActivate: [AdminGuard] },
-  { path: 'test-personalidad/:id', component: TestPersonalidadComponent },
+  { path: 'test-personalidad/:id', component: TestPersonalidadComponent, canActivate: [UsuarioGuard] },
   { path: 'test-personalidad-modificar/:id', component: ModificarTestComponent, canActivate: [AdminGuard] },
   { path: 'contacto', component: ContactoComponent },
 

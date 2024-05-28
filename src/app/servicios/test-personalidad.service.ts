@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TestPersonalidadService {
-  private API_TEST_PERSONALIDAD = 'https://cuestionarios-24d7b-default-rtdb.firebaseio.com/tests-personalidad';
+  private API_TEST_PERSONALIDAD = 'https://tests-de-personalidad-default-rtdb.firebaseio.com/tests-personalidad';
 
   constructor(private http: HttpClient, private storage: AngularFireStorage) { }
 
@@ -39,7 +39,6 @@ export class TestPersonalidadService {
         if (testPersonalidad) {
           // Asignar la propiedad imagenPregunta a cada pregunta
           testPersonalidad.preguntas.forEach(pregunta => {
-            pregunta.opciones = ['En desacuerdo totalmente', 'En desacuerdo', 'Ni en desacuerdo ni en acuerdo', 'En acuerdo', 'En total acuerdo'];
             if (pregunta.imagenPregunta) {
               pregunta.imagenPregunta = pregunta.imagenPregunta;
             } else {

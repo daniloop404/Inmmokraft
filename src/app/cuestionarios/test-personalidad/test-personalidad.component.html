@@ -1,6 +1,6 @@
-<div class="portada-titulo" [ngStyle]="{'background-image': 'url(' + testPersonalidad.portada + ')'}">
-  <h2>{{ testPersonalidad.nombreTest }}</h2>
-  <p>Categoría: {{ testPersonalidad.categoria }}</p>
+<div *ngIf="testPersonalidad" class="portada-titulo" [ngStyle]="{'background-image': 'url(' + testPersonalidad?.portada + ')'}">
+  <h2>{{ testPersonalidad?.nombreTest }}</h2>
+  <p>Categoría: {{ testPersonalidad?.categoria }}</p>
 </div>
 
 <div class="container mt-5">
@@ -12,21 +12,55 @@
       <div class="card-body d-flex">
         <div class="question-section">
           <h4 class="mb-3">{{ pregunta.textoPregunta }}</h4>
-          <div *ngFor="let opcionTexto of pregunta.opciones; let j = index" class="form-check mb-2">
-            <div class="option-container">
-              <button
-                class="btn"
-                [ngClass]="{
-                  'btn-light': !isOptionSelected(i, j),
-                  'btn-dark': isOptionSelected(i, j),
-                  'btn-secondary': !isOptionSelected(i, j) && isOptionHovered(opcionTexto)
-                }"
-                (click)="selectAnswer(i, j)"
-                (mouseenter)="setHoveredOption(opcionTexto)"
-                (mouseleave)="clearHoveredOption()"
-              >
-                {{ opcionTexto }}
-              </button>
+          <div *ngIf="pregunta.tipoPregunta === 'multiple'">
+            <div *ngFor="let opcion of pregunta.opciones; let j = index" class="form-check mb-2">
+              <div class="option-container">
+                <button
+                  class="btn"
+                  [ngClass]="{
+                    'btn-light': !isOptionSelected(i, j),
+                    'btn-dark': isOptionSelected(i, j),
+                    'btn-secondary': !isOptionSelected(i, j) && isOptionHovered(opcion.textoOpcion)
+                  }"
+                  (click)="selectAnswer(i, j)"
+                  (mouseenter)="setHoveredOption(opcion.textoOpcion)"
+                  (mouseleave)="clearHoveredOption()"
+                >
+                  {{ opcion.textoOpcion }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="pregunta.tipoPregunta === 'siNo'">
+            <div *ngFor="let opcion of pregunta.opciones; let j = index" class="form-check mb-2">
+              <div class="option-container mt-5">
+                <button
+                  class="btn"
+                  [ngClass]="{
+                    'btn-light': !isOptionSelected(i, j),
+                    'btn-dark': isOptionSelected(i, j),
+                    'btn-secondary': !isOptionSelected(i, j) && isOptionHovered(opcion.textoOpcion)
+                  }"
+                  (click)="selectAnswer(i, j)"
+                  (mouseenter)="setHoveredOption(opcion.textoOpcion)"
+                  (mouseleave)="clearHoveredOption()"
+                >
+                  {{ opcion.textoOpcion }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="pregunta.tipoPregunta === 'rango'" class="mt-5">
+            <input type="range" min="1" max="10" class="form-range"
+                   [value]="selectedRanges[i] ? selectedRanges[i] : 5" 
+                   (input)="onRangeChange(i, $event)" #rangeInput> 
+            <div class="range-values">
+              <span *ngFor="let value of rangeValues; let j = index" style="font-size: larger;"
+                    [style.left.%]="(j / (rangeValues.length - 1)) * 100"
+                    class="range-value">{{ value }}</span>
+            </div>
+            <div class="range-selected-value">
+              {{ selectedRanges[i] ? selectedRanges[i] : 'Número no elegido' }}
             </div>
           </div>
         </div>
@@ -35,6 +69,10 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="showMensajeError" class="alert alert-danger" role="alert">
+    Por favor, responde todas las preguntas.
   </div>
 
   <div class="text-center mt-3 mb-4">
@@ -46,4 +84,24 @@
   <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Página anterior</button>
   <span style="margin: 0 10px;"></span>
   <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage * questionsPerPage >= totalQuestions">Página siguiente</button>
+</div>
+
+<!-- Overlay de resultados -->
+<div *ngIf="showResultados" class="results-overlay">
+  <div class="results-container">
+    <h2 class="results-title">{{ resultadoTest?.resultado }}</h2>
+    <p class="results-description">{{ resultadoTest?.descripcion }}</p>
+    <img *ngIf="resultadoTest?.imagenRango" src="{{ resultadoTest?.imagenRango }}" alt="Imagen del resultado" class="results-image">
+
+    <!--<div class="question-scores">
+      <div *ngFor="let pregunta of testPersonalidad.preguntas; let i = index" class="individual-score">
+        <p>
+          Pregunta {{ i + 1 }}: {{ pregunta.textoPregunta }} - Puntaje: {{ calculateQuestionScore(i) }}
+        </p>
+      </div>
+    </div>-->
+
+    <p>Tu puntaje total: {{ calculateScore() }}</p> 
+    <button class="btn btn-secondary" (click)="closeResultados()">Cerrar</button>
+  </div>
 </div>

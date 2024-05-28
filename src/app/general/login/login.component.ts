@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UsuariosService } from 'src/app/sevicios/usuarios.service';
+import { UsuariosService } from 'src/app/servicios/usuarios.service';
 import { Router } from '@angular/router'; // Importa el módulo Router
 
 @Component({

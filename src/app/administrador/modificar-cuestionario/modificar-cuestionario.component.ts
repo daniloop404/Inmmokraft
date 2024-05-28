@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CuestionariosService } from 'src/app/cuestionarios/cuestionarios.service';
+import { CuestionariosService } from 'src/app/servicios/cuestionarios.service';
 
 @Component({
   selector: 'app-modificar-cuestionario',
