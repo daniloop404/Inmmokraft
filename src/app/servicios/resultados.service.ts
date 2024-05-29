@@ -31,13 +31,13 @@ export class ResultadosService {
     );
   }
 
-  guardarResultadosTestPersonalidad(uid: string, testId: string, score: number, resultado: string): Observable<any> {
+  guardarResultadosTestPersonalidad(uid: string, testId: string, score: number, resultado: string, descripcion: string, imagenRango: string, nombreTest: string): Observable<any> {
     return this.obtenerDatosUsuario(uid).pipe(
       switchMap((data: any) => {
         const userKey = Object.keys(data).find(key => data[key].uid === uid);
         if (userKey) {
           const resultadosUrl = `${this.API_USUARIOS}/${userKey}/resultadosPersonalidad.json`;
-          const nuevoResultado = { testId, score, resultado };
+          const nuevoResultado = { testId, score, resultado, descripcion, imagenRango, nombreTest }; // Agregamos nombreTest
           return this.http.post(resultadosUrl, nuevoResultado);
         } else {
           throw new Error('Usuario no encontrado');

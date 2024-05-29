@@ -1,55 +1,72 @@
-<div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header">
-            <h4 class="card-title">Perfil de Usuario</h4>
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title">Perfil de Usuario</h4>
+        </div>
+        <div class="card-body">
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Usuario:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(ngModel)]="usuario.nombre" disabled>
+            </div>
           </div>
-          <div class="card-body">
-            <div class="form-group row">
-              <label class="col-sm-4 col-form-label">Nombre:</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" [(ngModel)]="usuario.nombre" disabled>
-              </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Apellido:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(ngModel)]="usuario.apellido" disabled>
             </div>
-            <div class="form-group row">
-              <label class="col-sm-4 col-form-label">Apellido:</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" [(ngModel)]="usuario.apellido" disabled>
-              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Correo Electrónico:</label>
+            <div class="col-sm-8">
+              <input type="email" class="form-control" [(ngModel)]="usuario.email" disabled>
             </div>
-            <div class="form-group row">
-              <label class="col-sm-4 col-form-label">Correo Electrónico:</label>
-              <div class="col-sm-8">
-                <input type="email" class="form-control" [(ngModel)]="usuario.email" disabled>
-              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Institución:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(ngModel)]="usuario.institucion" disabled>
             </div>
-            <div class="form-group row">
-              <label class="col-sm-4 col-form-label">Rol:</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" [(ngModel)]="usuario.rol" disabled>
-              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Grado:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(ngModel)]="usuario.grado" disabled>
             </div>
-            <div class="form-group row">
-              <label class="col-sm-4 col-form-label">Institución:</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" [(ngModel)]="usuario.institucion" disabled>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-sm-4 col-form-label">Grado:</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" [(ngModel)]="usuario.grado" disabled>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-sm-4 col-form-label">Paralelo:</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" [(ngModel)]="usuario.paralelo" disabled>
-              </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">Paralelo:</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(ngModel)]="usuario.paralelo" disabled>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+<div class="mt-4 mx-3">
+  <h5 class="mb-3 text-center">Resultados de los Tests</h5>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="text-center align-middle">Nombre del Test</th>
+        <th class="text-center align-middle">Resultado</th>
+        <th class="text-center align-middle">Descripción</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let resultado of resultados">
+        <td class="align-middle text-center" style="font-weight: bold;">{{ resultado.nombreTest }}</td>
+        <td class="align-middle text-center">{{ resultado.resultado }}</td>
+        <td class="align-middle text-center">{{ resultado.descripcion }}</td>
+        <td class="align-middle text-center">
+          <img *ngIf="resultado.imagenRango" src="{{ resultado.imagenRango }}" alt="Imagen del resultado" class="img-fluid" style="max-width: 400px;">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
