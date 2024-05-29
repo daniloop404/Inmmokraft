@@ -1,8 +1,9 @@
 .portada-titulo {
+  position: relative; /* Para que el overlay se posicione correctamente */
   background-size: cover;
   background-repeat: repeat-x;
   background-position: center;
-  height: 250px; /* Aumenta la altura */
+  height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,6 +17,22 @@
   margin: 0;
   color: #fff;
   text-shadow: -1px -1px 0 #000000;
+  font-size: x-large;
+}
+
+.portada-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Color gris transparente */
+  z-index: 1;
+}
+
+.portada-titulo-content {
+  position: relative;
+  z-index: 2;
 }
 
 .card-container {
@@ -84,6 +101,7 @@
   max-height: 350px;
   object-fit: contain;
 }
+
 .range-values {
   position: relative;
   width: 100%;
@@ -103,16 +121,16 @@
 
 /* Estilos para el overlay de resultados */
 .results-overlay {
-  position: fixed; /* Overlay sobre todo el viewport */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Fondo oscurecido */
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Asegúrate de que esté encima de otros elementos */
+  z-index: 1000;
 }
 
 .results-container {
@@ -120,16 +138,16 @@
   padding: 30px;
   border-radius: 8px;
   text-align: center;
-  max-width: 600px;
+  max-width: 1000px;
 }
 
 .results-title {
-  font-size: 2.5rem; /* Aumenta el tamaño del título */
+  font-size: 2.5rem;
   margin-bottom: 20px;
 }
 
 .results-description {
-  font-size: 1.2rem; /* Aumenta el tamaño de la descripción */
+  font-size: 1.2rem;
   margin-bottom: 20px;
 }
 

@@ -4,10 +4,14 @@
       <div class="card mb-4 shadow-sm" (click)="vertestPersonalidad(test.id)">
         <div class="card-body">
           <h5 class="card-title">{{ test.nombreTest }}</h5>
-        </div>
-        <div class="card-image" [ngStyle]="{'background-image': 'url(' + test.portada + ')'}"></div>
-        <div class="card-body">
-          <p class="card-text">Categoría: {{ test.categoria }}</p>
+          <div class="card-image" [ngStyle]="{'background-image': 'url(' + test.portada + ')'}"></div>
+          <div class="card-body">
+            <p class="card-text">{{ test.categoria }}</p>
+            <div class="card-title mt-4 completado">
+              <p *ngIf="esTestCompletado(test.id)" style="color: white">Completado</p>
+            </div>
+            
+          </div>
         </div>
       </div>
     </div>

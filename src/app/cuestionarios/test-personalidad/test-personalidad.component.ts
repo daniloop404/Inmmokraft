@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TestPersonalidadService } from 'src/app/servicios/test-personalidad.service';
 import { ResultadosService } from 'src/app/servicios/resultados.service';
 import { UsuariosService } from 'src/app/servicios/usuarios.service';
@@ -45,11 +45,15 @@ export class TestPersonalidadComponent implements OnInit {
   showResultados: boolean = false; // Variable para controlar la visibilidad del overlay de resultados
   resultadoTest: RangoPuntaje | null = null; // Objeto que contiene los datos del resultado
   selectedRanges: number[] = []; // Nueva variable para almacenar los valores de los rangos
+  testCompletado: boolean = false; // Variable para indicar si el test está completado
+  resultadoGuardado: any = null; // Variable para almacenar los resultados guardados
+
   constructor(
     private route: ActivatedRoute,
     private testPersonalidadService: TestPersonalidadService,
     private resultadosService: ResultadosService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -61,10 +65,11 @@ export class TestPersonalidadComponent implements OnInit {
           this.totalQuestions = this.testPersonalidad.preguntas.length;
           this.initializeSelectedAnswers();
           this.paginatePreguntas();
+          this.verificarTestCompletado(testPersonalidadId);
         }
       });
     });
-    
+
     this.usuariosService.getEstadoAutenticacion().subscribe(user => {
       if (user) {
         this.uid = user.uid;
@@ -72,11 +77,50 @@ export class TestPersonalidadComponent implements OnInit {
     });
   }
 
+  verificarTestCompletado(testPersonalidadId: string) {
+    this.resultadosService.obtenerDatosUsuario(this.uid!).subscribe(data => {
+      const userKey = Object.keys(data).find(key => data[key].uid === this.uid);
+      if (userKey) {
+        // Busca la propiedad 'resultadosPersonalidad' en el objeto data[userKey]
+        const resultados = data[userKey].resultadosPersonalidad; 
+  
+        // Si la propiedad existe y no es null
+        if (resultados) {
+          // Itera sobre cada entrada del objeto 'resultadosPersonalidad'
+          for (const resultadoKey in resultados) {
+            if (resultados.hasOwnProperty(resultadoKey)) {
+              const resultadoGuardado = resultados[resultadoKey];
+  
+              // Comprueba si el testId coincide
+              if (resultadoGuardado.testId === testPersonalidadId) {
+                this.testCompletado = true;
+                this.resultadoGuardado = resultadoGuardado;
+                this.mostrarResultados(resultadoGuardado);
+                break; // Sale del bucle si se encuentra el resultado
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  mostrarResultados(resultadoGuardado: any) {
+    this.resultadoTest = {
+      descripcion: resultadoGuardado.descripcion,
+      imagenRango: resultadoGuardado.imagenRango,
+      resultado: resultadoGuardado.resultado,
+      rangoMayor:0,
+      rangoMenor:0
+    };
+    this.showResultados = true;
+  }
+
   calculateQuestionScore(preguntaIndex: number): number {
     if (preguntaIndex < this.testPersonalidad.preguntas.length) {
       const pregunta = this.testPersonalidad.preguntas[preguntaIndex];
       const selectedAnswer = this.selectedAnswers.find(answer => answer.preguntaId === pregunta.id);
-  
+
       if (pregunta.tipoPregunta === 'multiple' || pregunta.tipoPregunta === 'siNo') {
         if (selectedAnswer && selectedAnswer.opcionIndex !== null) {
           return Number(pregunta.opciones[selectedAnswer.opcionIndex].puntaje);
@@ -134,11 +178,11 @@ export class TestPersonalidadComponent implements OnInit {
       this.showMensajeError = true;
       return;
     }
-  
+
     // Revisa si todas las preguntas tienen una respuesta válida
     if (this.selectedAnswers.some((respuesta, index) => {
         if (this.paginatedPreguntas[index].tipoPregunta === 'multiple' || this.paginatedPreguntas[index].tipoPregunta === 'siNo') {
-          return respuesta.opcionIndex === null; 
+          return respuesta.opcionIndex === null;
         } else if (this.paginatedPreguntas[index].tipoPregunta === 'rango') {
           return !this.selectedRanges[index]; // Verifica si se ha seleccionado un valor en el rango
         }
@@ -154,16 +198,16 @@ export class TestPersonalidadComponent implements OnInit {
 
     // Mostrar el puntaje en el overlay
     console.log(totalScore); // Puedes usar este log para verificar el puntaje
-    
+
     const testPersonalidadId = this.route.snapshot.paramMap.get('id')!;
-    this.resultadosService.guardarResultadosTestPersonalidad(this.uid, testPersonalidadId, totalScore, this.resultadoTest.resultado).subscribe(() => {
+    this.resultadosService.guardarResultadosTestPersonalidad(this.uid, testPersonalidadId, totalScore, this.resultadoTest.resultado, this.resultadoTest.descripcion, this.resultadoTest.imagenRango, this.testPersonalidad.nombreTest).subscribe(() => { // Enviamos el nombre del test
       console.log('Resultados del test de personalidad guardados exitosamente');
     }, error => {
       console.error('Error al guardar los resultados del test de personalidad:', error);
     });
   }
 
-   getRangeResult(score: number): RangoPuntaje {
+  getRangeResult(score: number): RangoPuntaje {
     // Calcula el rango de puntuaciones
     const rangos = this.testPersonalidad.rangosPuntaje;
 
@@ -199,6 +243,9 @@ export class TestPersonalidadComponent implements OnInit {
   }
 
   closeResultados() {
+    // Cierra el overlay de resultados
     this.showResultados = false;
+    this.router.navigate(['/cuestionarios']); 
+    
   }
 }

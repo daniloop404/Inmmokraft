@@ -1,9 +1,12 @@
 <div *ngIf="testPersonalidad" class="portada-titulo" [ngStyle]="{'background-image': 'url(' + testPersonalidad?.portada + ')'}">
-  <h2>{{ testPersonalidad?.nombreTest }}</h2>
-  <p>Categoría: {{ testPersonalidad?.categoria }}</p>
+  <div class="portada-overlay"></div>
+  <div class="portada-titulo-content text-center">
+    <h2>{{ testPersonalidad?.nombreTest }}</h2>
+    <p>{{ testPersonalidad?.categoria }}</p>
+  </div>
 </div>
 
-<div class="container mt-5">
+<div *ngIf="!testCompletado" class="container mt-5">
   <div *ngFor="let pregunta of paginatedPreguntas; let i = index" class="card-container mb-4">
     <div class="card">
       <div class="card-header">
@@ -51,17 +54,18 @@
             </div>
           </div>
           <div *ngIf="pregunta.tipoPregunta === 'rango'" class="mt-5">
+            <div class="range-selected-value">
+              {{ selectedRanges[i] ? selectedRanges[i] : 'Número no elegido' }}
+            </div>
             <input type="range" min="1" max="10" class="form-range"
-                   [value]="selectedRanges[i] ? selectedRanges[i] : 5" 
-                   (input)="onRangeChange(i, $event)" #rangeInput> 
+                  [value]="selectedRanges[i] ? selectedRanges[i] : 5" 
+                  (input)="onRangeChange(i, $event)" #rangeInput> 
             <div class="range-values">
               <span *ngFor="let value of rangeValues; let j = index" style="font-size: larger;"
                     [style.left.%]="(j / (rangeValues.length - 1)) * 100"
                     class="range-value">{{ value }}</span>
             </div>
-            <div class="range-selected-value">
-              {{ selectedRanges[i] ? selectedRanges[i] : 'Número no elegido' }}
-            </div>
+            
           </div>
         </div>
         <div class="image-section">
@@ -80,10 +84,10 @@
   </div>
 </div>
 
-<div class="text-center mb-4">
-  <button class="btn btn-primary" (click)="previousPage()" [disabled]="currentPage === 1">Página anterior</button>
+<div *ngIf="!testCompletado" class="text-center mb-4">
+  <button class="btn btn-primary" *ngIf="totalQuestions > questionsPerPage" (click)="previousPage()" [disabled]="currentPage === 1">Página anterior</button>
   <span style="margin: 0 10px;"></span>
-  <button class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage * questionsPerPage >= totalQuestions">Página siguiente</button>
+  <button class="btn btn-primary" *ngIf="totalQuestions > questionsPerPage" (click)="nextPage()" [disabled]="currentPage * questionsPerPage >= totalQuestions">Página siguiente</button>
 </div>
 
 <!-- Overlay de resultados -->
@@ -99,9 +103,9 @@
           Pregunta {{ i + 1 }}: {{ pregunta.textoPregunta }} - Puntaje: {{ calculateQuestionScore(i) }}
         </p>
       </div>
-    </div>-->
+    </div>
 
-    <p>Tu puntaje total: {{ calculateScore() }}</p> 
-    <button class="btn btn-secondary" (click)="closeResultados()">Cerrar</button>
+    <p>Tu puntaje total: {{ calculateScore() }}</p> -->
+    <button class="btn btn-primary" (click)="closeResultados()">Cerrar</button>
   </div>
 </div>
